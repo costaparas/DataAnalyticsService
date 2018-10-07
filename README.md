@@ -1,4 +1,5 @@
 # DataAnalyticsService
+A RESTful API for recommending movies to users
 
 ## Description
 Movie recommendation...
@@ -14,9 +15,17 @@ Movie recommendation...
 
 ## Project Structure
 * ml/ - backend Machine Learning algorithms consumed by API
-* api/ - API based on Flask-RESTPlus
+* api/ - RESTful API based on Flask-RESTPlus
 * client/ - client GUI for the API based on ...
 * data/ - datasets used by ML algorithms
+
+## Contributing
+1. Clone the repository (`git clone git@github.com:costaparas/DataAnalyticsService.git`)
+2. Create a new feature branch (`git checkout -b foobar-feature`)
+3. Commit new changes (`git commit -a -m 'add foobar'`)
+4. Push to the branch (`git push origin foobar-feature`)
+5. Create a new Pull Request (<https://github.com/costaparas/DataAnalyticsService/pulls>)
+6. Merge the Pull Request once it is approved by at least one other contributor
 
 ## License
 Copyright (C) 2018 Benjamin Liew, Costa Paraskevopoulos, Dankoon Yoo, Saffat Akanda, Sharon Park
