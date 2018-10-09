@@ -2,9 +2,15 @@
 A RESTful API for recommending movies to users
 
 ## Description
-Movie recommendation...
+This service provides a fast, reliable means for users to find movies they may be interested in watching. The service provides a RESTful API for movie recommendation, as well as a client program for ease of user browsing. The recommender system is build on Python 3 using machine learning algorithms provided by the Scikit-learn (<http://scikit-learn.org/stable/>) library.
 
-## Installation
+## Getting Started
+
+### Prerequisites
+It is assumed that:
+ * Python 3.6.5 or above is installed (<https://www.python.org/downloads/>)
+
+### Installation
 `pip3 install -r requirements.txt`
 
 ## Usage
