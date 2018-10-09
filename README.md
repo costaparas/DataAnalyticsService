@@ -22,7 +22,7 @@ It is assumed that:
 ## Project Structure
 * ml/ - backend Machine Learning algorithms consumed by API
 * api/ - RESTful API based on Flask-RESTPlus
-* client/ - client GUI for the API based on ...
+* client/ - client GUI for the API based on Flask and Jinja2
 * data/ - datasets used by ML algorithms
 
 ## Contributing
