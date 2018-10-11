@@ -33,12 +33,5 @@ class AuthTokenFactory:
         return info
 
 
-def test_auth_tokens():
-    SECRET_KEY = "ahslkjdf234ulwken"
-    auth = AuthTokenFactory(secret_key=SECRET_KEY)
-    token = auth.generate(username="bob")
-    auth.validate(token)
 
 
-if __name__ == '__main__':
-    test_auth_tokens()
