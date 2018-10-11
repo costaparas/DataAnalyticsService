@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restplus import Api, Resource
-
+import json
 from mockdata import movie_data
 
 app = Flask(__name__)
@@ -13,7 +13,11 @@ api.namespaces.clear()
 movies_ns = api.namespace("movies", description="")
 recommendations_ns = api.namespace("recommendations", description="")
 
+def get_movie_data():
+    with open("data/movies-small.json") as f:
+        data = json.load(f)
 
+    return data
 @movies_ns.route('/<string:movie_id>')
 class Movie(Resource):
     def get(self, movie_id):
@@ -42,4 +46,9 @@ class Recommendations(Resource):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import argparse
+    parser = argparse.ArgumentParser(description='Run api server.')
+    parser.add_argument("port",type=int,default=5001)
+    parser.add_argument("debug",type=bool, default=True)
+    args = parser.parse_args()
+    # app.run(debug=True)

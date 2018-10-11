@@ -8,4 +8,4 @@ def test_auth_token():
     auth.validate(token)
 
 if __name__ == '__main__':
-    pytest.main([])
+    pytest.main(["test_auth.py"])
