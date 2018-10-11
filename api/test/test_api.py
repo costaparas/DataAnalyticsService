@@ -2,12 +2,13 @@ import os
 import tempfile
 
 import pytest
-from api import app
+from api import app, MOVIE_DATASET
 
 
 @pytest.fixture
 def client():
     #setup db
+    app.config[MOVIE_DATASET] = "small"
     client = app.test_client()
 
     yield client
