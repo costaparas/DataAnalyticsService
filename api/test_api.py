@@ -16,7 +16,7 @@ def client():
     pass
 
 def test_a(client):
-    resp = client.get("/movies/1")
+    resp = client.get("/movies/0114709")
     print(resp)
 
 if __name__ == '__main__':
