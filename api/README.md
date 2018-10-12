@@ -2,6 +2,7 @@
 ## Introduction
 The API server supports token authentication.
 The API server can be run with auth enabled or disabled.
+To run the API server with auth enabled, a private key file is required.
 
 ## Generate private key file
 ```bash
