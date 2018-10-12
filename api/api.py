@@ -25,7 +25,7 @@ def run_from_cmd_line(app):
     parser.add_argument("--port", "-p", type=int, default=5001)
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("--dataset", choices=("full", "small"), default="small")
-    parser.add_argument("--private_key", type=str, help="Path to private key. If no key is specified then API auth is disabled.")
+    parser.add_argument("--key", type=str, default=None, help="Path to private key. If no key is specified then API auth is disabled.")
     args = parser.parse_args()
     print(args)
     app.config[MOVIE_DATASET] = args.dataset
