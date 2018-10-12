@@ -9,6 +9,21 @@ body {
    font-family: Adams;
 }
 
+h2 {
+    color: black;
+    text-align: center;
+    font-size: 1em;
+    margin: 0;
+    margin-top: 0.7em;
+}
+
+p {
+    color: black;
+    text-align: center;
+    font-size: 0.8em;
+    margin: 2px;
+}
+
 section.overhang {
    height: 20vh;
    text-align: center;
@@ -53,15 +68,14 @@ section.move_row {
 }
 
 
-
 .scroll_row_card {
    margin: 10px;
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
    min-width: 130px;
    max-width: 130px;
  }
  
  .scroll_row_card img {
    width: 100%;
-   height: 100%;
+   height: 80%;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
  }
