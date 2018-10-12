@@ -1,14 +1,18 @@
-import sys
 import os
-import secrets
-import base64
+import sys
+
+if sys.version_info[0] < 3:
+    raise Exception("Python 3 required.")
+else:
+    import secrets
+
 NUM_BYTES = 128
 
+
 def generate_key():
-    if sys.version_info[0] < 3:
-        return base64.b64encode(os.urandom(NUM_BYTES))
-    else:
-        return secrets.token_urlsafe(NUM_BYTES)
+    return secrets.token_urlsafe(NUM_BYTES)
+
+
 def cmd_line():
     import argparse
     parser = argparse.ArgumentParser(description='Generate private key')
