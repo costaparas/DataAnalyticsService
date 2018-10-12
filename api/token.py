@@ -1,20 +1,19 @@
 # appropriated from here: https://github.com/mysilver/COMP9321-Data-Services/blob/master/Week8_Authentication/activity_3.py
-from time import time
-
 from itsdangerous import (
     JSONWebSignatureSerializer,
     SignatureExpired,
 )
-import os
+from time import time
 
 SECONDS_IN_A_DAY = 60 * 60 * 24
 SECONDS_IN_30_DAYS = 30 * SECONDS_IN_A_DAY
 DEFAULT_TOKEN_LIFETIME = SECONDS_IN_30_DAYS
 
+
 class AuthTokenFactory:
     @staticmethod
     def withPrivateKeyFile(path_to_private_key):
-        key = open(path_to_private_key,encoding="utf8").read()
+        key = open(path_to_private_key, encoding="utf8").read()
         auth_factory = AuthTokenFactory(private_key=key)
         return auth_factory
 
@@ -38,9 +37,6 @@ class AuthTokenFactory:
         if time() > info['exp']:
             raise SignatureExpired("Token has expired, get a new token.")
         return info
-
-
-
 
 
 if __name__ == '__main__':
