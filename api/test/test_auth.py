@@ -1,9 +1,9 @@
 import pytest
-from auth import AuthTokenFactory
+from tokens import AuthTokenFactory
 
 def test_auth_token():
     SECRET_KEY = "ahslkjdf234ulwken"
-    auth = AuthTokenFactory(secret_key=SECRET_KEY)
+    auth = AuthTokenFactory(private_key=SECRET_KEY)
     token = auth.generate(username="bob")
     auth.validate(token)
 
