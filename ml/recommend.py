@@ -5,11 +5,18 @@
 import sys, random, pickle
 
 def main():
-	(ret, status) = recommend()
+
+	#movie to query
+	if len(sys.argv) > 1:
+		query = sys.argv[1]
+	else:
+		query = ''
+
+	(ret, status) = recommend(query)
 	print(ret)
 	sys.exit(status)
 
-def recommend():
+def recommend(query):
 
 	#retrieve cluster data
 	try:
@@ -21,18 +28,14 @@ def recommend():
 		print(str(e), file=sys.stderr)
 		sys.exit(1)
 
-	#movie to query
-	if len(sys.argv) > 1:
-		query = sys.argv[1]
-	else:
-		query = random.choice(list(cluster_numbers))
-
+	if not query: query = random.choice(list(cluster_numbers))
 	status = 0
 	if query in cluster_numbers:
 		cluster = cluster_numbers[query]
 		ret = {
 			'movie_queried': query,
 			'cluster_number': cluster,
+			'num_movies': len(clusters[cluster]),
 			'cluster_movies': clusters[cluster]
 		}
 	else:
