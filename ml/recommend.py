@@ -5,7 +5,9 @@
 import sys, random, pickle
 
 def main():
-	recommend()
+	(ret, status) = recommend()
+	print(ret)
+	sys.exit(status)
 
 def recommend():
 
@@ -36,8 +38,7 @@ def recommend():
 	else:
 		ret = {'Unknown movie': query}
 		status = 1
-	print(ret)
-	sys.exit(status)
+	return (ret, status)
 
 if __name__ == '__main__':
 	main()
