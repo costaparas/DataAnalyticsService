@@ -57,7 +57,7 @@ section.overhang input {
 
 section.move_row {
    box-shadow: inset 0 0px 4em rgba(216,191,216);
-   height: infinite;
+   height: 80em;
 }
 
 .scroll_row {
@@ -74,7 +74,15 @@ section.move_row {
    margin: 20px;
    min-width: 130px;
    max-width: 130px;
- }
+   cursor: pointer;
+   border-radius: 10px;
+   transition: 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.scroll_row_card:hover {
+   transform: scale(1.05);
+
+}
  
  .scroll_row_card img {
    width: 100%;
