@@ -12,6 +12,9 @@ python generate_private_key.py my_private_key
 ```bash
 #Run API server on port 5001, using 'my_private_key' as the private key file.
 python api.py --port 5001 my_private_key
+
+#Optionally, enable debugging...
+python api.py --port 5001 --debug my_private_key
 ```
 ## Generate an API token
 ```python
