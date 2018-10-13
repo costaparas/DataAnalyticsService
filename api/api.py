@@ -4,12 +4,12 @@ from flask import Flask
 from flask_restplus import Api
 
 from resources.auth_token import AuthTokenFactory
-from resources.const import HEADER_AUTH_TOKEN, PRIVATE_KEY, AUTH_FACTORY
+from resources.const import HEADER_AUTH_TOKEN, PRIVATE_KEY, AUTH_FACTORY, MOVIE_DATASET
 
 app = Flask(__name__)
 api = Api(app,
           title="Movie Recommendation API",
-          description="This API provides access to a database of movie titles, information about each title and movie recommendations.",
+          description="This API provides access to a database of movie titles and movie recommendations.",
           version="1.0",
           authorizations={
               'apiKey': {
@@ -33,7 +33,6 @@ api.add_namespace(token_api)
 
 def run_from_cmd_line(app):
     import argparse
-    from const import MOVIE_DATASET
     parser = argparse.ArgumentParser(description='Run api server.')
     parser.add_argument(PRIVATE_KEY, type=str, help="Path to private key.")
     parser.add_argument("--port", "-p", type=int, default=5001)

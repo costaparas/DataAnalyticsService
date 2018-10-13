@@ -5,7 +5,7 @@ from flask_restplus import abort
 from itsdangerous import BadSignature, SignatureExpired
 
 from .const import HEADER_AUTH_TOKEN, AUTH_FACTORY
-
+from .app_context import get_auth
 
 def requires_auth(api):
     def decorator(f):
@@ -14,11 +14,10 @@ def requires_auth(api):
         def decorated(*args, **kwargs):
             token = request.headers.get(HEADER_AUTH_TOKEN)
             if not token:
-                abort(401, 'Authentication token is missing')
+                abort(401, 'Authentication token is missing.')
             else:
-                auth = current_app.config.get(AUTH_FACTORY)
                 try:
-                    token_payload = auth.validate(token)
+                    token_payload = get_auth().validate(token)
                     return f(*args, **kwargs)
                 except BadSignature:
                     abort(401, "Invalid token")

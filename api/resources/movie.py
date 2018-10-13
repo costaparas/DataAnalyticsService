@@ -2,7 +2,7 @@ from flask_restplus import abort, Resource, Namespace
 from .requires_auth import requires_auth
 from movie_data import get_movie_data
 
-api = Namespace("movies", description="")
+api = Namespace("movies", description="Movie data.")
 
 def get_movie_or_404(movie_id):
     movie_data = get_movie_data()
