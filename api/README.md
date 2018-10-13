@@ -14,7 +14,7 @@ python generate_private_key.py my_private_key
 # By default server runs on port 5001.
 python api.py my_private_key
 
-# Optionally, enable flask debugging and specify port number.
+# Optionally, specify port number and enable flask debugging.
 python api.py --port 5001 --debug my_private_key
 ```
 ## View API Documentation (Swagger)
