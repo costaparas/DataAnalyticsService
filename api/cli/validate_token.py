@@ -1,11 +1,17 @@
 import os
+import sys
 from datetime import datetime
+from pprint import pprint
 
 from ago import human
 from itsdangerous import SignatureExpired, BadSignature
 
-from token import AuthTokenFactory
-from pprint import pprint
+this_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.abspath(
+    os.path.join(this_dir, "../resources")
+))
+
+from auth_token import AuthTokenFactory
 
 
 def cmd_validate_token(args, verbose=False):
@@ -42,7 +48,7 @@ def cmd_line():
 
     args = parser.parse_args()
     # print(args)
-    cmd_validate_token(args, verbose=(args.verbose>0))
+    cmd_validate_token(args, verbose=(args.verbose > 0))
 
 
 if __name__ == '__main__':

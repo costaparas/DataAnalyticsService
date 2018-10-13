@@ -1,8 +1,14 @@
 import os
+import sys
+this_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.abspath(
+    os.path.join(this_dir, "../resources")
+))
 
-from token import AuthTokenFactory, DEFAULT_TOKEN_LIFETIME
-from datetime import datetime, timedelta
+from auth_token import AuthTokenFactory, DEFAULT_TOKEN_LIFETIME
+from datetime import timedelta
 from ago import human
+
 
 def cmd_generate_token(args, verbose=False):
     path_private_key = os.path.abspath(args.private_key)
@@ -27,7 +33,6 @@ def cmd_generate_token(args, verbose=False):
         if verbose:
             print("Not writing token to disk.")
         print(token)
-
 
 
 def cmd_line():

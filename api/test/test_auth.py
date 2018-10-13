@@ -1,5 +1,5 @@
 import pytest
-from token import AuthTokenFactory
+from resources.auth_token import AuthTokenFactory
 
 def test_auth_token():
     SECRET_KEY = "ahslkjdf234ulwken"

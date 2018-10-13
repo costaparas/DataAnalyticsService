@@ -11,7 +11,8 @@ api.namespaces.clear()
 movies_ns = api.namespace("movies", description="")
 recommendations_ns = api.namespace("recommendations", description="")
 
-from resources import Movie, MovieList, Recommendations
+from resources.recommendation import Recommendations
+from resources.movie import Movie, MovieList
 
 movies_ns.add_resource(Movie, '/<string:movie_id>')
 movies_ns.add_resource(MovieList, '')
