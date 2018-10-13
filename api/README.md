@@ -10,10 +10,11 @@ python generate_private_key.py my_private_key
 ```
 ## Run API server
 ```bash
-# Run API server on port 5001, using 'my_private_key' as the private key file.
-python api.py --port 5001 my_private_key
+# Run API server using 'my_private_key' as the private key file.
+# By default server runs on port 5001.
+python api.py my_private_key
 
-# Optionally, enable debugging...
+# Optionally, enable flask debugging and specify port number.
 python api.py --port 5001 --debug my_private_key
 ```
 ## View API Documentation (Swagger)
