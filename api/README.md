@@ -41,6 +41,16 @@ def generate_token():
         return token
 
 
+def token_is_valid(token):
+    resp = requests.post(build_url("/token/validate"), data={
+        "token": token,
+    })
+    if resp.status_code == 200:
+        token_status = resp.json()["token_status"]
+        return token_status == "valid"
+    return False
+
+
 def get_movie_list(token):
     resp = requests.get(build_url("/movies"), headers={
         "Auth-Token": token
@@ -53,16 +63,6 @@ def get_movie_list(token):
         pass
 
 
-def token_is_valid(token):
-    resp = requests.post(build_url("/token/validate"), data={
-        "token": token,
-    })
-    if resp.status_code == 200:
-        token_status = resp.json()["token_status"]
-        return token_status == "valid"
-    return False
-
-
 if __name__ == '__main__':
     token = generate_token()
     print("Token: {}".format(token))
@@ -70,4 +70,5 @@ if __name__ == '__main__':
 
     # if you want to check a token is valid:
     is_valid = token_is_valid(token)
+    print("Token valid? {}".format(is_valid))
 ```
