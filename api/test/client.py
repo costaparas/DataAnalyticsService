@@ -43,7 +43,7 @@ def get_movie_list(token):
 if __name__ == '__main__':
     token = generate_token()
     print("Token: {}".format(token))
-    print("Movies: {}".format(get_movie_list(token)))
+    print("Movies: {}".format(get_movie_list(token)[:10]))
 
     # if you want to check a token is valid:
     is_valid = token_is_valid(token)
