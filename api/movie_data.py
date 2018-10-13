@@ -2,8 +2,9 @@ import json
 import flask
 import os
 
+from resources.const import MOVIE_DATASET
 
-MOVIE_DATASET = "movie_dataset"
+
 def get_this_dir():
     path_of_this_script = os.path.realpath(__file__)
     dir_ = os.path.dirname(path_of_this_script)

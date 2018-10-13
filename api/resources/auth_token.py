@@ -9,7 +9,6 @@ SECONDS_IN_A_DAY = 60 * 60 * 24
 SECONDS_IN_30_DAYS = 30 * SECONDS_IN_A_DAY
 DEFAULT_TOKEN_LIFETIME = SECONDS_IN_30_DAYS
 
-
 class AuthTokenFactory:
     @staticmethod
     def withPrivateKeyFile(path_to_private_key):

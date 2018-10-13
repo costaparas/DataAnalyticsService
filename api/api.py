@@ -1,35 +1,51 @@
+from pprint import pprint
+
 from flask import Flask
 from flask_restplus import Api
+
+from resources.auth_token import AuthTokenFactory
+from resources.const import HEADER_AUTH_TOKEN, PRIVATE_KEY, AUTH_FACTORY
 
 app = Flask(__name__)
 api = Api(app,
           title="Movie Recommendation API",
           description="This API provides access to a database of movie titles, information about each title and movie recommendations.",
-          version="1.0"
+          version="1.0",
+          authorizations={
+              'apiKey': {
+                  'type': 'apiKey',
+                  'in': 'header',
+                  'name': HEADER_AUTH_TOKEN
+              }
+          },
+          security="apiKey"
           )
 api.namespaces.clear()
-movies_ns = api.namespace("movies", description="")
-recommendations_ns = api.namespace("recommendations", description="")
 
-from resources.recommendation import Recommendations
-from resources.movie import Movie, MovieList
+from resources.movie import api as movie_api
+from resources.recommendation import api as recom_api
+from resources.auth_endpoint import api as token_api
 
-movies_ns.add_resource(Movie, '/<string:movie_id>')
-movies_ns.add_resource(MovieList, '')
-recommendations_ns.add_resource(Recommendations, '/<string:movie_id>')
+api.add_namespace(movie_api)
+api.add_namespace(recom_api)
+api.add_namespace(token_api)
 
 
 def run_from_cmd_line(app):
     import argparse
-    from movie_data import MOVIE_DATASET
+    from const import MOVIE_DATASET
     parser = argparse.ArgumentParser(description='Run api server.')
+    parser.add_argument(PRIVATE_KEY, type=str, help="Path to private key.")
     parser.add_argument("--port", "-p", type=int, default=5001)
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("--dataset", choices=("full", "small"), default="small")
-    parser.add_argument("--key", type=str, default=None, help="Path to private key. If no key is specified then API auth is disabled.")
     args = parser.parse_args()
     print(args)
     app.config[MOVIE_DATASET] = args.dataset
+    path_to_private_key = getattr(args, PRIVATE_KEY)
+    app.config[AUTH_FACTORY] = AuthTokenFactory.withPrivateKeyFile(path_to_private_key=path_to_private_key
+                                                                   )
+    pprint(app.config)
     app.run(debug=args.debug, port=args.port)
 
 
