@@ -16,7 +16,7 @@ python api.py --port 5001 my_private_key
 # Optionally, enable debugging...
 python api.py --port 5001 --debug my_private_key
 ```
-## Swagger Docs
+## View API Documentation (Swagger)
 Open [http://localhost:5001](http://localhost:5001) in a browser.
 ## Example API usage
 ```python
