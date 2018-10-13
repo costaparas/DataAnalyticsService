@@ -20,10 +20,22 @@ python api.py --port 5001 --debug my_private_key
 ```python
 import requests
 
+
 def build_url(api_path):
-    #Change this if you change the server port.
+    # Change this if you change the server port.
     server_url = "http://localhost:5001"
     return server_url + api_path
+
+
+def generate_token():
+    resp = requests.post(build_url("/token/generate"), data={
+        "username": "user",
+        "password": "test1",
+    })
+    if resp.status_code == 201:
+        resp_json = resp.json()
+        token = resp_json["token"]
+        return token
 
 
 def get_movie_list(token):
@@ -50,23 +62,11 @@ def token_is_valid(token):
     return False
 
 
-def generate_token():
-    base_url = "http://localhost:5001"
-    resp = requests.post(build_url("/token/generate"), data={
-        "username": "user",
-        "password": "test1",
-    })
-    if resp.status_code == 201:
-        resp_json = resp.json()
-        token = resp_json["token"]
-        return token
-
-
 if __name__ == '__main__':
     token = generate_token()
     print("Token: {}".format(token))
     print("Movies: {}".format(get_movie_list(token)))
 
-    #if you want to check a token is valid:
+    # if you want to check a token is valid:
     is_valid = token_is_valid(token)
 ```
