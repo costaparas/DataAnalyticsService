@@ -27,17 +27,21 @@ movie_list_req_parser.add_argument('limit', type=int, help="Limit number of resu
 @api.route('')
 class MovieList(Resource):
     @api.response(200, 'Success.')
-    @api.doc(description="Get available movies as a list of movie IDs.")
+    @api.doc(description="Get a list of available movies.")
     @api.expect(movie_list_req_parser)
     @requires_auth(api)
     def get(self):
         args = movie_list_req_parser.parse_args()
         limit = args.get('limit')
-        movie_data = get_movie_data()
-        movie_ids = list(movie_data.keys())
+        movie_data_dict = get_movie_data()
+        movie_data_list = []
+        for movie_id, movie_obj in movie_data_dict.items():
+            new_movie_obj = movie_obj.copy()
+            new_movie_obj["movie_id"] = movie_id
+            movie_data_list.append(new_movie_obj)
         if limit is None:
-            limit = len(movie_ids)
+            limit = len(movie_data_list)
         return {
-            'movies': movie_ids[:limit],
+            'movies': movie_data_list[:limit],
             'num_movies': limit
         }

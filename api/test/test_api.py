@@ -59,4 +59,4 @@ def test_validate_token(client):
 
 
 if __name__ == '__main__':
-    pytest.main(["test_api.py", "-k", "test_valid"])
+    pytest.main(["test_api.py", "-k", "test_generate_token_success"])

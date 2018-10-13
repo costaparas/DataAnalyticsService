@@ -52,7 +52,7 @@ def token_is_valid(token):
 
 
 def get_movie_list(token):
-    resp = requests.get(build_url("/movies"), headers={
+    resp = requests.get(build_url("/movies?limit=2"), headers={
         "Auth-Token": token
     })
     if resp.status_code == 200:
@@ -66,7 +66,7 @@ def get_movie_list(token):
 if __name__ == '__main__':
     token = generate_token()
     print("Token: {}".format(token))
-    print("Movies: {}".format(get_movie_list(token)[:10]))
+    print("Movies: {}".format(get_movie_list(token)))
 
     # if you want to check a token is valid:
     is_valid = token_is_valid(token)
