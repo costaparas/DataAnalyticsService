@@ -4,6 +4,8 @@
 
 import sys, random, pickle
 
+status = 0
+
 def main():
 
 	#movie to query
@@ -12,11 +14,11 @@ def main():
 	else:
 		query = ''
 
-	(ret, status) = recommend(query)
-	print(ret)
+	print(recommend(query))
 	sys.exit(status)
 
 def recommend(query):
+	global status
 
 	#retrieve cluster data
 	try:
@@ -29,7 +31,6 @@ def recommend(query):
 		sys.exit(1)
 
 	if not query: query = random.choice(list(cluster_numbers))
-	status = 0
 	if query in cluster_numbers:
 		cluster = cluster_numbers[query]
 		ret = {
@@ -41,7 +42,7 @@ def recommend(query):
 	else:
 		ret = {'Unknown movie': query}
 		status = 1
-	return (ret, status)
+	return ret
 
 if __name__ == '__main__':
 	main()
