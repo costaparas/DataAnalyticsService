@@ -8,30 +8,21 @@ To run the API server with auth enabled, a private key file is required.
 # write a new private key to a file called 'my_private_key'.
 python generate_private_key.py my_private_key
 ```
-## Generate an API token
+## Run API server
 ```bash
-# write a new token to a file called 'my_token'.
-python generate_token.py my_private_key --output my_token
+python api.py --port 5001 my_private_key
 ```
-```bash
-# Optionally specify a token lifetime.
-# Generate a token valid for 3600 seconds (1 hour).
-python generate_token.py my_private_key --output my_token --lifetime 3600
+## Generate an API token
+```python
+import requests
+resp = requests.post("/token/generate", data={
+    "username": "user",
+    "password": "test1",
+})
+if resp.status_code == 201:
+    token = resp.json["token"]
 ```
 ## Validate an API token
-```bash
-
-# validate the token contained in file 'my_token'.
-python validate_token.py my_private_key my_token
-```
-## Run API server with token auth enabled
-```bash
-python api.py --port 5001 --key my_private_key
-```
-## Run API server with auth disabled
-```bash
-python api.py --port 5001
-```
 ## Make authenticated API request with token
 ```python
 # python
