@@ -14,8 +14,8 @@ TEST_USERS = {
 
 api = Namespace("token", description="API authentication token.")
 credential_parser = reqparse.RequestParser()
-credential_parser.add_argument('username', type=str, required=True)
-credential_parser.add_argument('password', type=str, required=True)
+credential_parser.add_argument('username', type=str, required=True, location="form")
+credential_parser.add_argument('password', type=str, required=True, location="form")
 
 
 @api.route('/generate')
@@ -37,7 +37,7 @@ class GenerateToken(Resource):
 
 
 token_parser = reqparse.RequestParser()
-token_parser.add_argument('token', type=str, required=True)
+token_parser.add_argument('token', type=str, required=True, location="form")
 
 
 @api.route('/validate')

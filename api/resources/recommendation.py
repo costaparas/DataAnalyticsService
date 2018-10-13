@@ -5,6 +5,7 @@ from resources.requires_auth import requires_auth
 
 api = Namespace("recommendations", description="Movie recommendations.")
 
+@api.param("movie_id", "Movie ID")
 @api.route('/<string:movie_id>')
 class Recommendations(Resource):
 
