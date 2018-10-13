@@ -1,7 +1,7 @@
 # API readme
 ## Introduction
-The API server can be run with token authentication enabled or disabled.
-To run the API server with auth enabled, a private key file is required.
+The API server has token authentication enabled.
+To run the API server a private key file is required.
 
 ## Generate private key file
 ```bash
@@ -10,6 +10,7 @@ python generate_private_key.py my_private_key
 ```
 ## Run API server
 ```bash
+#Run API server on port 5001, using 'my_private_key' as the private key file.
 python api.py --port 5001 my_private_key
 ```
 ## Generate an API token
