@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from ago import human
+from datetime import datetime
 from flask_restplus import (
     Resource, reqparse,
     Namespace, abort)
@@ -57,7 +56,8 @@ class ValidateToken(Resource):
             utc = datetime.utcfromtimestamp(exp_epoch)
             iso = utc.isoformat() + "Z"
             delta = datetime.utcnow() - utc
-            return {"token_status": "valid",
+            return {
+                    "token_status": "valid",
                     "expires_at": iso,
                     "expires_in_roughly": human(delta, future_tense="{0}")
                     }

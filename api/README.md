@@ -32,12 +32,12 @@ def build_url(api_path):
 
 def generate_token():
     resp = requests.post(build_url("/token/generate"), data={
+        # This is a valid set of credentials.
         "username": "user",
         "password": "test1",
     })
     if resp.status_code == 201:
-        resp_json = resp.json()
-        token = resp_json["token"]
+        token = resp.json()["token"]
         return token
 
 
@@ -46,8 +46,7 @@ def get_movie_list(token):
         "Auth-Token": token
     })
     if resp.status_code == 200:
-        resp_json = resp.json()
-        movie_list = resp_json["movies"]
+        movie_list = resp.json()["movies"]
         return movie_list
     else:
         # Auth failure (bad token)
@@ -59,8 +58,7 @@ def token_is_valid(token):
         "token": token,
     })
     if resp.status_code == 200:
-        resp_json = resp.json()
-        token_status = resp_json["token_status"]
+        token_status = resp.json()["token_status"]
         return token_status == "valid"
     return False
 
