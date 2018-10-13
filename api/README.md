@@ -19,12 +19,16 @@ python api.py --port 5001 --debug my_private_key
 ## Generate an API token
 ```python
 import requests
-resp = requests.post("/token/generate", data={
-    "username": "user",
-    "password": "test1",
-})
-if resp.status_code == 201:
-    token = resp.json["token"]
+def generate_token():
+    base_url = "http://localhost:5001"
+    resp = requests.post(base_url + "/token/generate", data={
+        "username": "user",
+        "password": "test1",
+    })
+    if resp.status_code == 201:
+        resp_json = resp.json()
+        token = resp_json["token"]
+        print(token)
 ```
 ## Validate an API token
 ## Make authenticated API request with token
