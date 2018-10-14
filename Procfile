@@ -1,1 +1,1 @@
-web: gunicorn api:app --pythonpath api,ml
+web: sh run-api.sh
