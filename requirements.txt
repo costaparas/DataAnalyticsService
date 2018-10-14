@@ -86,7 +86,6 @@ six==1.11.0
 sklearn==0.0
 systemd-python==234
 tables==3.4.2
-toml==0.9.3
 ubuntu-drivers-common==0.0.0
 ufw==0.35
 unattended-upgrades==0.1
