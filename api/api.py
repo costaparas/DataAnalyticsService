@@ -57,7 +57,14 @@ def run_from_cmd_line(app):
     app.config[AUTH_FACTORY] = AuthTokenFactory.withPrivateKeyFile(
         path_to_private_key=path_to_private_key
     )
-    app.run(debug=args.debug, port=args.port)
+
+    # override port number with environment variable
+    # this approach is used in the deployed api
+    port = args.port
+    if 'PORT' in os.environ:
+        port = os.environ['PORT']
+
+    app.run(debug=args.debug, port=port)
 
 
 if __name__ == '__main__':
