@@ -4,7 +4,10 @@ from flask_restplus import Api
 from resources.auth_token import AuthTokenFactory
 from resources.const import HEADER_AUTH_TOKEN, PRIVATE_KEY, AUTH_FACTORY, MOVIE_DATASET
 
+from werkzeug.contrib.fixers import ProxyFix
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app)
+
 api = Api(app,
           title="Movie Recommendation API",
           description="This API provides access to a database of movie titles and movie recommendations.",
