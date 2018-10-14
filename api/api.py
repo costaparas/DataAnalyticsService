@@ -64,7 +64,7 @@ def run_from_cmd_line(app):
     if 'PORT' in os.environ:
         port = os.environ['PORT']
 
-    app.run(debug=args.debug, port=port)
+    app.run(debug=args.debug, port=port, host='0.0.0.0')
 
 
 if __name__ == '__main__':
