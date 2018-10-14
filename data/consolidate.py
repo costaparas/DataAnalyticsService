@@ -7,10 +7,13 @@ import pandas as pd
 import sys, re, json, codecs
 
 def main():
+	if len(sys.argv) != 3:
+		print('Usage: %s INPUT-FILE OUTPUT-FILE' %sys.argv[0], file=sys.stderr)
+		sys.exit(1)
 
 	#read movie data, links and tags
 	try:
-		with open('movies-raw.json', 'r') as f:
+		with open(sys.argv[1], 'r') as f:
 			movies = json.load(f)
 		links = pd.read_csv('movielens/links.csv', dtype=str)
 		tags = pd.read_csv('movielens/tags.csv', dtype=str)
@@ -36,7 +39,7 @@ def main():
 
 	#output movie data to json file
 	try:
-		with open('movies-full.json', 'wb') as f:
+		with open(sys.argv[2], 'wb') as f:
 			json.dump(movies, codecs.getwriter('utf-8')(f), ensure_ascii=False)
 	except (PermissionError, OSError) as e:
 		print(str(e), file=sys.stderr)

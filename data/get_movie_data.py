@@ -7,6 +7,9 @@ import requests as r
 import sys, json, codecs
 
 def main():
+	if len(sys.argv) != 2:
+		print('Usage: %s OUTPUT-FILE' %sys.argv[0], file=sys.stderr)
+		sys.exit(1)
 
 	#read imdb links & api keys
 	try:
@@ -34,7 +37,7 @@ def main():
 
 	#output movie data to json file
 	try:
-		with open('movies-raw.json', 'wb') as f:
+		with open(sys.argv[1], 'wb') as f:
 			json.dump(movies, codecs.getwriter('utf-8')(f), ensure_ascii=False)
 	except (PermissionError, OSError) as e:
 		print(str(e), file=sys.stderr)

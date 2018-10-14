@@ -11,6 +11,16 @@ def get_movie_or_404(movie_id):
     else:
         abort(404, "Movie not found.")
 
+def get_movies_info(movie_ids):
+    movie_data_dict = get_movie_data()
+    movie_data_list = []
+    for movie_id, movie_obj in movie_data_dict.items():
+        if len(movie_ids) > 1 and not movie_id in movie_ids: continue
+        new_movie_obj = movie_obj.copy()
+        new_movie_obj['movie_id'] = movie_id
+        movie_data_list.append(new_movie_obj)
+    return movie_data_list
+
 @api.param("movie_id", "Movie ID")
 @api.route('/<string:movie_id>')
 class Movie(Resource):
@@ -33,12 +43,7 @@ class MovieList(Resource):
     def get(self):
         args = movie_list_req_parser.parse_args()
         limit = args.get('limit')
-        movie_data_dict = get_movie_data()
-        movie_data_list = []
-        for movie_id, movie_obj in movie_data_dict.items():
-            new_movie_obj = movie_obj.copy()
-            new_movie_obj["movie_id"] = movie_id
-            movie_data_list.append(new_movie_obj)
+        movie_data_list = get_movies_info([])
         if limit is None:
             limit = len(movie_data_list)
         return {
