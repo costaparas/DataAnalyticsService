@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd api
-gunicorn api:app
+python3 api.py
