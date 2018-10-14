@@ -11,7 +11,7 @@ def main():
 
 	#read movie data
 	try:
-		with open('../data/movies-full.json', 'r') as f:
+		with open('../data/movies-large.json', 'r') as f:
 			all_movies = json.load(f)
 	except (PermissionError, OSError) as e:
 		print(str(e), file=sys.stderr)
@@ -20,6 +20,7 @@ def main():
 	#KMeans will run out of memory on full dataset
 	n_movies = 1000
 	n_clusters = int(n_movies / 10)
+	random.seed(15)
 	keys = random.sample(list(all_movies), n_movies)
 	movies = {}
 	for key in keys:
@@ -64,12 +65,16 @@ def main():
 		clusters[kmeans[i]].append({'title': title, 'id': movie})
 		i += 1
 
-	#serialize cluster data for future retrieval
 	try:
+		#serialize cluster data for future retrieval
 		with open('clusters.pk', 'wb') as f:
 			pickle.dump(clusters, f)
 		with open('cluster-numbers.pk', 'wb') as f:
 			pickle.dump(cluster_numbers, f)
+
+		#output condensed dataset, containing only analysed movies
+		with open('../data/movies-full.json', 'wb') as f:
+			json.dump(movies, codecs.getwriter('utf-8')(f), ensure_ascii=False)
 	except (PermissionError, OSError) as e:
 		print(str(e), file=sys.stderr)
 		sys.exit(1)

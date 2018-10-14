@@ -22,7 +22,7 @@ python3 recommend.py
 * Or within a client program:
 ```python
 import recommend
-MOVIE_TITLE = 'Sacrifice'
+MOVIE_TITLE = 'Shanghai Noon'
 res = recommend.recommend(MOVIE_TITLE)
 print(res)
 ```
