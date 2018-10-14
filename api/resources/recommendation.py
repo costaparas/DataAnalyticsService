@@ -3,6 +3,10 @@ from flask_restplus import Resource, Namespace
 from resources.movie import get_movie_or_404
 from resources.requires_auth import requires_auth
 
+import sys
+sys.path.append('../ml')
+import recommend
+
 api = Namespace("recommendations", description="Movie recommendations.")
 
 @api.param("movie_id", "Movie ID")
@@ -18,5 +22,5 @@ class Recommendations(Resource):
         return {
                 'movie_id' : movie_id,
                 'movie' : movie,
-                'recommendations': []
+                'recommendations': recommend.recommend(movie['Title'])['cluster_movies']
             }
