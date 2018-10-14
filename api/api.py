@@ -32,7 +32,7 @@ api.add_namespace(token_api)
 def parse_cmd_line_args():
     import argparse
     parser = argparse.ArgumentParser(description='Run API server.')
-    parser.add_argument(PRIVATE_KEY, type=str, help="Path to private key.")
+    parser.add_argument(PRIVATE_KEY, type=str, help="Path to private key.", nargs='?')
     parser.add_argument("--port", "-p", type=int, default=5001)
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("--dataset", choices=("full", "small"), default="full")
@@ -41,9 +41,19 @@ def parse_cmd_line_args():
 
 
 def run_from_cmd_line(app):
+    import os
     args = parse_cmd_line_args()
     app.config[MOVIE_DATASET] = args.dataset
-    path_to_private_key = getattr(args, PRIVATE_KEY)
+
+    # use environment variable if no private key file supplied
+    # this approach is used in the deployed api
+    path_to_private_key = '.private-key'
+    if 'PRIVATE_KEY' in os.environ:
+        with open('.private-key', 'w') as f:
+            f.write(os.environ['PRIVATE_KEY'])
+    else:
+        path_to_private_key = getattr(args, PRIVATE_KEY)
+
     app.config[AUTH_FACTORY] = AuthTokenFactory.withPrivateKeyFile(
         path_to_private_key=path_to_private_key
     )
