@@ -1,25 +1,29 @@
-# API readme
+# API README
+
 ## Introduction
 The API server has token authentication enabled.
 To run the API server a private key file is required.
 
-## Generate private key file
-```bash
-# write a new private key to a file called 'my_private_key'.
-python generate_private_key.py my_private_key
+## Generate Private Key File
+```sh
+# Write a new private key to a file called '.private-key'
+python3 generate_private_key.py .private-key
 ```
-## Run API server
-```bash
-# Run API server using 'my_private_key' as the private key file.
-# By default server runs on port 5001.
-python api.py my_private_key
 
-# Optionally, specify port number and enable flask debugging.
-python api.py --port 5001 --debug my_private_key
+## Run API Server
+```sh
+# Run API server using '.private-key' as the private key file
+# By default server runs on port 5001
+python3 api.py .private-key
+
+# Optionally, specify port number and enable flask debugging
+python3 api.py --port 5001 --debug .private-key
 ```
+
 ## View API Documentation (Swagger)
 Open [http://localhost:5001](http://localhost:5001) in a browser.
-## Example API usage
+
+## Example API Usage
 ```python
 import requests
 
