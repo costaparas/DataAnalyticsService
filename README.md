@@ -9,7 +9,7 @@ This service provides a fast, reliable means for users to find movies they may b
 ### Prerequisites
 It is assumed that:
 * Python 3.6.5 or above is installed (<https://www.python.org/downloads/>)
-* Heroku CLI 7.16.8 is installed (<https://devcenter.heroku.com/articles/heroku-cli>)
+* Heroku CLI 7.16.8 is installed (<https://devcenter.heroku.com/articles/heroku-cli#download-and-install>)
 
 ### Installation
 `pip3 install -r requirements.txt`
@@ -23,20 +23,20 @@ The API and client application are deployed in separate instances on the Heroku 
 
 ### Deploy API
 ```sh
-# Login to heroku CLI
+# Login to Heroku CLI
 heroku login
 
 # Deploy from master branch
 git push heroku master
 
-# Deploy from branch 'b'
-git push heroku b:master
+# Deploy from branch 'foo'
+git push heroku foo:master
 ```
 
 ## Project Structure
 * `ml/` - backend Machine Learning algorithms consumed by API
 * `api/` - RESTful API based on Flask-RESTPlus
-* `client/` - client GUI for the API build on React.js and the Materialize framework
+* `client/` - client GUI for the API built on React.js and the Materialize framework
 * `data/` - datasets used by ML algorithms
 
 ## Contributing
