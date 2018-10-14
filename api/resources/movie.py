@@ -11,7 +11,7 @@ def get_movie_or_404(movie_id):
     else:
         abort(404, "Movie not found.")
 
-def get_movie_info(movie_ids):
+def get_movies_info(movie_ids):
     movie_data_dict = get_movie_data()
     movie_data_list = []
     for movie_id, movie_obj in movie_data_dict.items():
@@ -43,7 +43,7 @@ class MovieList(Resource):
     def get(self):
         args = movie_list_req_parser.parse_args()
         limit = args.get('limit')
-        movie_data_list = get_movie_info()
+        movie_data_list = get_movies_info()
         if limit is None:
             limit = len(movie_data_list)
         return {
