@@ -21,16 +21,34 @@ Refer to README.md files in the individual project directories for details
 The API and client application are deployed in separate instances on the Heroku cloud platform as a service:
 * API is hosted at: <https://movie-recommender-api.herokuapp.com/>
 
-### Deploy API
+### Heroku Configuration
 ```sh
 # Login to Heroku CLI
 heroku login
 
+# Ensure you are listed as a collaborator:
+# https://dashboard.heroku.com/apps/movie-recommender-api/access
+
+# Add the heroku remote
+heroku git:remote -a movie-recommender-api
+
+# Set the private key for use by the API
+heroku config:set PRIVATE_KEY=`python3 api/generate_private_key.py /tmp/.private_key`
+```
+
+### Deploy API
+```sh
 # Deploy from master branch
 git push heroku master
 
 # Deploy from branch 'foo'
 git push heroku foo:master
+
+# Restart the server if needed
+heroku restart
+
+# View the server logs
+heroku logs --tail
 ```
 
 ## Project Structure
