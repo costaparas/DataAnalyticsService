@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.cluster import KMeans, MeanShift
+from sklearn.cluster import KMeans, MeanShift, AgglomerativeClustering, Birch
 from sklearn.feature_extraction.text import CountVectorizer
 import sys, json, codecs, re, collections, random, pickle, sklearn.metrics, enum
 
@@ -8,10 +8,13 @@ import sys, json, codecs, re, collections, random, pickle, sklearn.metrics, enum
 class Model_Types(enum.Enum):
     KMEANS = 1
     MEANSHIFT = 2
+    BIRCH = 3
+    AGGLOMERATIVE = 4
+    AGGLOMERATOVE_EUCLID = 5
 
 debug = True
 write_evaluation_metrics = True
-model_type = Model_Types.KMEANS
+model_type = Model_Types.AGGLOMERATOVE_EUCLID
 
 
 def read_movie_file():
@@ -53,7 +56,7 @@ def write_metrics(model_name, model, labels, clusters=0, width=30):
             data = f.readlines()
     except FileNotFoundError:
         with open('mlMetrics.txt', 'w', encoding='utf-8') as f:
-            data = ["{:{width}} {:{width}} {:{width}} {:{width}}\n".format("Model Name", "# Clusters",
+            data = ["{:<{width}} {:<{width}} {:<{width}} {:<{width}}\n".format("Model Name", "# Clusters",
                                                                              "Silhouette Score", "Calinski-Hara Score",
                                                                              width=width)]
             f.write(data[0])
@@ -72,9 +75,10 @@ def write_metrics(model_name, model, labels, clusters=0, width=30):
     calinski_hara_score = sklearn.metrics.calinski_harabaz_score(model, labels)
 
     if line_to_write == len(data):
-        data.append("{:{width}} {:{width}} {:{width}} {:{width}}\n".format(model_name, clusters, silhouette_score, calinski_hara_score, width=width))
+        data.append("{:<{width}} {:<{width}} {:<{width}} {:<{width}}\n".format(
+                model_name, clusters, silhouette_score, calinski_hara_score, width=width))
     else:
-        data[line_to_write] = "{:{width}} {:{width}} {:{width}} {:{width}}\n".format(
+        data[line_to_write] = "{:<{width}} {:<{width}} {:<{width}} {:<{width}}\n".format(
                 model_name, clusters, silhouette_score, calinski_hara_score, width=width)
 
     with open('mlMetrics.txt', 'w', encoding='utf-8') as f:
@@ -89,7 +93,7 @@ def main():
     n_movies = 1000
     #n_movies =
     n_clusters = int(n_movies / 10)
-    #n_clusters = 200
+    #n_clusters = 300
 
     movies = get_movies_dict(all_movies, n_movies)
 
@@ -135,8 +139,16 @@ def main():
         else: model = KMeans(n_clusters=n_clusters, n_jobs=-1).fit_predict(cluster_features)
 
     elif model_type == Model_Types.MEANSHIFT:
+        # Meanshift does not take in a number of clusters
         model = MeanShift(n_jobs=-1).fit_predict(cluster_features)
         n_clusters = len(set(model))
+    elif model_type == Model_Types.BIRCH:
+        model = Birch(n_clusters=n_clusters).fit_predict(cluster_features)
+    elif model_type == Model_Types.AGGLOMERATIVE:
+        model = AgglomerativeClustering(n_clusters=n_clusters,
+                                        affinity="cosine", linkage="complete").fit_predict(cluster_features)
+    elif model_type == Model_Types.AGGLOMERATOVE_EUCLID:
+        model = AgglomerativeClustering(n_clusters=n_clusters).fit_predict(cluster_features)
 
 
     # group movies into clusters, along with their title and ID
