@@ -54,7 +54,7 @@ heroku logs --tail
 ## Project Structure
 * `ml/` - backend Machine Learning algorithms consumed by API
 * `api/` - RESTful API based on Flask-RESTPlus
-* `client/` - client GUI for the API built on React.js and the Materialize framework
+* `client/` - client GUI for the API built on Flask and Materialize
 * `data/` - datasets used by ML algorithms
 
 ## Contributing

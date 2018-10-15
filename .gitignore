@@ -118,5 +118,8 @@ venv.bak/
 *.tmp
 *~
 
-#PyCharm
+# PyCharm
 .idea/*
+
+# mac
+.DS_store
