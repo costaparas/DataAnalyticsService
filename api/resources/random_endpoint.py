@@ -1,10 +1,15 @@
-from flask_restplus import abort, Resource, Namespace, reqparse
+import random
+
+from flask_restplus import Resource, Namespace, reqparse
+
+from resources.movie import get_movies_info
 from .requires_auth import requires_auth
-from movie_data import get_movie_data
 
 api = Namespace("random", description="Get a random selection of movies.")
 movie_list_req_parser = reqparse.RequestParser()
-movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results.")
+movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results.", default=10)
+
+
 @api.route('/movies')
 class MovieList(Resource):
     @api.response(200, 'Success.')
@@ -17,7 +22,9 @@ class MovieList(Resource):
         movie_data_list = get_movies_info([])
         if limit is None:
             limit = len(movie_data_list)
+
+        sample = random.choices(movie_data_list, k=limit)
         return {
-            'movies': movie_data_list[:limit],
+            'movies': sample,
             'num_movies': limit
         }

@@ -10,10 +10,6 @@ def append_ml_dir_to_syspath(file):
     path_to_append = get_this_dir(file)
     path_to_append = os.path.join(path_to_append, "../../ml")
     path_to_append = os.path.abspath(path_to_append)
-    print(path_to_append)
     sys.path.append(path_to_append)
-    sys_path = sys.path
 
 
-# append_ml_dir_to_syspath()
-# import recommend

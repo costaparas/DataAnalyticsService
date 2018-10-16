@@ -30,7 +30,7 @@ def get_token(client):
 
 def test_get_random_movies(client):
     token = get_token(client=client)
-    resp = client.get("/movies/random", headers={
+    resp = client.get("/random/movies", headers={
         HEADER_AUTH_TOKEN: token,
     }, data={
         "limit": 2,
@@ -46,6 +46,7 @@ def test_get_recommendation(client):
     })
     j = resp2.json
     assert resp2.status_code == 200
+    assert 'recommendations' in j
 
 
 def test_unauthenticated_get(client):
@@ -79,4 +80,5 @@ def test_validate_token(client):
 if __name__ == '__main__':
     pytest.main(["test_api.py", "-k", "test_get_random"])
     # pytest.main(["test_api.py", "-k", "test_get_rec"])
+    # pytest.main(["test_api.py"])
 
