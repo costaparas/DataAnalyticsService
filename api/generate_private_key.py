@@ -23,7 +23,7 @@ def cmd_line():
     else:
         key = generate_key()
         print(key)
-        with open(args.output, "w") as f:
+        with open(os.open(args.output, os.O_CREAT | os.O_WRONLY, 0o600), "w") as f:
             f.write(key)
 
 

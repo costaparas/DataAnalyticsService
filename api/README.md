@@ -21,7 +21,7 @@ python3 api.py --port 5001 --debug .private-key
 ```
 
 ## View API Documentation (Swagger)
-Open [http://localhost:5001](http://localhost:5001) in a browser.
+Open [https://movie-recommender-api.herokuapp.com/](https://movie-recommender-api.herokuapp.com/) in a browser.
 
 ## Example API Usage
 ```python
@@ -29,8 +29,7 @@ import requests
 
 
 def build_url(api_path):
-    # Change this if you change the server port.
-    server_url = "http://localhost:5001"
+    server_url = "https://movie-recommender-api.herokuapp.com"
     return server_url + api_path
 
 
