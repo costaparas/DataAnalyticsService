@@ -39,6 +39,22 @@ class Movie(Resource):
         return get_movie_or_404(movie_id)
 
 
+def sort_movies_by_rating(movies):
+    MAX_VOTES = 100000
+    def get_rating(movie):
+        # Returns a hybrid rating based on popularity and score.
+        rating = movie.get("imdbRating")
+        votes = movie.get("imdbVotes")
+        if rating is not None and votes is not None:
+            rating = float(rating)
+            votes = int(votes.replace(",","").strip())
+            # return rating * votes
+            return 0.5*(rating/10.0) + 0.5*(min(votes,MAX_VOTES) / MAX_VOTES)
+        else:
+            return 0
+
+    sorted_movies = list(sorted(movies, key=get_rating, reverse=True))
+    return sorted_movies
 
 
 def sort_movies_by_title(movies):
@@ -72,12 +88,16 @@ movie_list_req_parser.add_argument('inTitle', type=str, help="Query movies by ti
 SORT_BY_RELEASE_DATE_ASC = "oldest"
 SORT_BY_RELEASE_DATE_DESC = "newest"
 SORT_BY_TITLE = "title"
+SORT_BY_RATING = "top-rated"
 
 movie_list_req_parser.add_argument('sortBy',
-                                   choices=(SORT_BY_RELEASE_DATE_ASC, SORT_BY_RELEASE_DATE_DESC, SORT_BY_TITLE),
+                                   choices=(
+                                   SORT_BY_RELEASE_DATE_ASC, SORT_BY_RELEASE_DATE_DESC, SORT_BY_TITLE, SORT_BY_RATING),
                                    help="Sort search results.",
                                    default=SORT_BY_TITLE)
-movie_list_req_parser.add_argument('genre',choices=(),help="Query movies of a certain genre.")
+movie_list_req_parser.add_argument('genre', choices=get_genres(), help="Query movies of a certain genre.")
+
+
 @api.route('')
 class MovieList(Resource):
     @api.response(200, 'Success.')
@@ -90,13 +110,17 @@ class MovieList(Resource):
         inTitle = args.get("inTitle")
         if inTitle is None: inTitle = ""
         sortBy = args.get("sortBy")
+        genre = args.get("genre")
 
         movie_data_list = get_movies_info([])
-        filtered = [x for x in movie_data_list if inTitle in x["Title"].lower()]
-        movie_data_list = filtered
+        movie_data_list = [x for x in movie_data_list if inTitle in x["Title"].lower()]
+        if genre is not None:
+            movie_data_list = [x for x in movie_data_list if genre.lower() in x["Genre"].lower()]
         if sortBy == SORT_BY_TITLE:
             movie_data_list = sort_movies_by_title(movie_data_list)
         elif sortBy in [SORT_BY_RELEASE_DATE_DESC, SORT_BY_RELEASE_DATE_ASC]:
             order_ascending = sortBy == SORT_BY_RELEASE_DATE_ASC
             movie_data_list = sort_movies_by_release_date(movie_data_list, ascending=order_ascending)
+        elif sortBy == SORT_BY_RATING:
+            movie_data_list = sort_movies_by_rating(movie_data_list)
         return build_movielist_response(movies=movie_data_list, limit=limit)

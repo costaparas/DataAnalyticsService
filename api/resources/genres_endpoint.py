@@ -15,7 +15,8 @@ def get_genres():
             for genre in genres: all_genres.add(genre.strip())
     if "N/A" in all_genres:
         all_genres.remove("N/A")
-    return list(all_genres)
+    sorted_ = list(sorted(list(all_genres) ))
+    return sorted_
 
 
 @api.route('')
@@ -25,7 +26,6 @@ class GenreList(Resource):
     @requires_auth(api)
     def get(self):
         genres = get_genres()
-        sorted_ = list(sorted(genres, key=lambda x:x))
         return {
-            "genres": sorted_,
+            "genres": genres
         }
