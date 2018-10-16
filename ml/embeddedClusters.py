@@ -22,7 +22,7 @@ model_type = Model_Types.AGGLOMERATIVE_EUCLID
 
 def read_movie_file():
     try:
-        with open('../data/movies-full.json', 'r', encoding="utf-8") as f:
+        with open('../data/movies-large.json', 'r', encoding="utf-8") as f:
             return json.load(f)
     except (PermissionError, OSError) as e:
         print(str(e), file=sys.stderr)
