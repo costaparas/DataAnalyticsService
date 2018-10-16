@@ -21,31 +21,36 @@ class Model_Types(enum.Enum):
     AGGLOMERATIVE_MAN = 8
 
 debug = False
+save_clusters = False
 write_evaluation_metrics = False
 model_type = Model_Types.AGGLOMERATIVE_EUCLID
 
 
 def read_movie_file():
     try:
-        with open('../data/movies-large.json', 'r', encoding="utf-8") as f:
+        with open('../data/movies-large.json', 'r', encoding='utf-8') as f:
             return json.load(f)
     except (PermissionError, OSError) as e:
         print(str(e), file=sys.stderr)
         sys.exit(1)
 
 
-def get_movies_dict(all_movies):
-    #keys = random.sample(list(all_movies), n_movies)
+def get_movies_dict(all_movies, n_movies=1000):
+    """
+    # use a random subset of movies
+    # keys = random.sample(list(all_movies), n_movies)
     keys = list(all_movies)
     movies = {}
     for key in keys:
         movies[key] = all_movies[key]
 
     return movies, len(keys)
+    """
+    return all_movies, len(list(all_movies))
 
 
 def write_clusters(clusters, cluster_numbers):
-    if debug: print("Writing Clusters")
+    if debug: print('Writing Clusters')
     try:
         with open('clusters.pk', 'wb') as f:
             pickle.dump(clusters, f)
@@ -96,10 +101,6 @@ def write_metrics(model_name, model, labels, clusters=0, width=30):
 def main():
     # read movie data
     all_movies = read_movie_file()
-
-    # KMeans will run out of memory on full dataset
-    #n_movies = 1000
-
     movies, n_movies = get_movies_dict(all_movies)
 
     n_clusters = 2 * int(n_movies / 10)
@@ -113,9 +114,9 @@ def main():
         genres.append(movies[movie]['Genre'])
         directors.append(movies[movie]['Director'])
         actors.append(movies[movie]['Actors'])
-        embedded_plot_summary.append(movies[movie]["Plot"])
+        embedded_plot_summary.append(movies[movie]['Plot'])
 
-    if debug: print("Vectorizing")
+    if debug: print('Vectorizing')
     genre_vectorizer = CountVectorizer(tokenizer=split, max_features=100)
     genres_vectorized = genre_vectorizer.fit_transform(genres)
     # print(genre_vectorizer.get_feature_names())
@@ -168,7 +169,6 @@ def main():
     elif model_type == Model_Types.AGGLOMERATIVE_EUCLID:
         model = AgglomerativeClustering(n_clusters=n_clusters).fit_predict(cluster_features)
 
-
     # group movies into clusters, along with their title and ID
     clusters = collections.defaultdict(list)
     cluster_numbers = {}
@@ -180,7 +180,7 @@ def main():
         i += 1
 
     # serialize cluster data for future retrieval
-    write_clusters(clusters, cluster_numbers)
+    if save_clusters: write_clusters(clusters, cluster_numbers)
 
     # Write out evaluation metrics
     if write_evaluation_metrics: write_metrics(model_type.name, cluster_features, model, n_clusters)
