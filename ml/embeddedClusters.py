@@ -10,11 +10,14 @@ class Model_Types(enum.Enum):
     MEANSHIFT = 2
     BIRCH = 3
     AGGLOMERATIVE = 4
-    AGGLOMERATOVE_EUCLID = 5
+    AGGLOMERATIVE_EUCLID = 5
+    AGGLOMERATIVE_L1 = 6
+    AGGLOMERATIVE_L2 = 7
+    AGGLOMERATIVE_MAN = 8
 
-debug = True
-write_evaluation_metrics = True
-model_type = Model_Types.AGGLOMERATOVE_EUCLID
+debug = False
+write_evaluation_metrics = False
+model_type = Model_Types.AGGLOMERATIVE_EUCLID
 
 
 def read_movie_file():
@@ -26,14 +29,14 @@ def read_movie_file():
         sys.exit(1)
 
 
-def get_movies_dict(all_movies, n_movies):
+def get_movies_dict(all_movies):
     #keys = random.sample(list(all_movies), n_movies)
     keys = list(all_movies)
     movies = {}
     for key in keys:
         movies[key] = all_movies[key]
 
-    return movies
+    return movies, len(keys)
 
 
 def write_clusters(clusters, cluster_numbers):
@@ -90,12 +93,11 @@ def main():
     all_movies = read_movie_file()
 
     # KMeans will run out of memory on full dataset
-    n_movies = 1000
-    #n_movies =
-    n_clusters = int(n_movies / 10)
-    #n_clusters = 300
+    #n_movies = 1000
 
-    movies = get_movies_dict(all_movies, n_movies)
+    movies, n_movies = get_movies_dict(all_movies)
+
+    n_clusters = 2 * int(n_movies / 10)
 
     # extract only relevant movie data
     genres = []
@@ -147,7 +149,18 @@ def main():
     elif model_type == Model_Types.AGGLOMERATIVE:
         model = AgglomerativeClustering(n_clusters=n_clusters,
                                         affinity="cosine", linkage="complete").fit_predict(cluster_features)
-    elif model_type == Model_Types.AGGLOMERATOVE_EUCLID:
+
+    elif model_type == Model_Types.AGGLOMERATIVE_L1:
+        model = AgglomerativeClustering(n_clusters=n_clusters,
+                                        affinity="l1", linkage="complete").fit_predict(cluster_features)
+
+    elif model_type == Model_Types.AGGLOMERATIVE_L2:
+        model = AgglomerativeClustering(n_clusters=n_clusters,
+                                        affinity="l2", linkage="complete").fit_predict(cluster_features)
+    elif model_type == Model_Types.AGGLOMERATIVE_MAN:
+        model = AgglomerativeClustering(n_clusters=n_clusters,
+                                        affinity="manhattan", linkage="complete").fit_predict(cluster_features)
+    elif model_type == Model_Types.AGGLOMERATIVE_EUCLID:
         model = AgglomerativeClustering(n_clusters=n_clusters).fit_predict(cluster_features)
 
 
