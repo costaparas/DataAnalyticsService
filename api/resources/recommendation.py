@@ -4,7 +4,8 @@ from resources.movie import get_movie_or_404, get_movies_info
 from resources.requires_auth import requires_auth
 
 import sys, os
-from resources.normalize_paths import append_ml_dir_to_syspath, get_this_dir
+from utils import get_this_dir, append_ml_dir_to_syspath
+
 append_ml_dir_to_syspath(__file__)
 # sys.path.append(os.path.join('..', 'ml'))
 import recommend

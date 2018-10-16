@@ -1,8 +1,9 @@
 from flask_restplus import abort, Resource, Namespace, reqparse
 
 from movie_data import get_movie_data
-from .requires_auth import requires_auth
 from resources.utils import release_date_and_year_strings_to_datetime
+from .requires_auth import requires_auth
+
 api = Namespace("movies", description="Movie data.")
 
 
@@ -45,8 +46,34 @@ SORT_BY_RELEASE_DATE_ASC = "oldest"
 SORT_BY_RELEASE_DATE_DESC = "newest"
 SORT_BY_TITLE = "title"
 
-movie_list_req_parser.add_argument('sortBy', choices=(SORT_BY_RELEASE_DATE_ASC, SORT_BY_RELEASE_DATE_DESC, SORT_BY_TITLE), help="Sort search results.",
+movie_list_req_parser.add_argument('sortBy',
+                                   choices=(SORT_BY_RELEASE_DATE_ASC, SORT_BY_RELEASE_DATE_DESC, SORT_BY_TITLE),
+                                   help="Sort search results.",
                                    default=SORT_BY_TITLE)
+
+
+def sort_movies_by_title(movies):
+    sorted_movies = list(sorted(movies, key=lambda x: x["Title"]))
+    return sorted_movies
+
+
+def sort_movies_by_release_date(movies, ascending=True):
+    sorted_movies = list(sorted(
+        movies,
+        key=lambda x: release_date_and_year_strings_to_datetime(x["Released"], x["Year"]),
+        reverse=(not ascending)
+    ))
+    return sorted_movies
+
+
+def build_movielist_response(movies, limit=None):
+    if limit is None:
+        limit = len(movies)
+    ret = movies[:limit]
+    return {
+        'movies': ret,
+        'num_movies': len(ret)
+    }
 
 
 @api.route('')
@@ -66,22 +93,8 @@ class MovieList(Resource):
         filtered = [x for x in movie_data_list if inTitle in x["Title"].lower()]
         movie_data_list = filtered
         if sortBy == SORT_BY_TITLE:
-            sorted_movies = list(sorted(movie_data_list, key=lambda x:x["Title"]))
-            movie_data_list = sorted_movies
-        elif sortBy in [SORT_BY_RELEASE_DATE_DESC,SORT_BY_RELEASE_DATE_ASC]:
-            do_reversed = sortBy == SORT_BY_RELEASE_DATE_DESC
-            #TODO: sort by 'Released' if its not 'N/A'. Otherwise check 'Year'.
-            sorted_movies = list(sorted(
-                movie_data_list,
-                key=lambda x:release_date_and_year_strings_to_datetime(x["Released"],x["Year"]),
-                reverse=do_reversed
-            ))
-            movie_data_list = sorted_movies
-        else:
-            pass
-        if limit is None:
-            limit = len(movie_data_list)
-        return {
-            'movies': movie_data_list[:limit],
-            'num_movies': limit
-        }
+            movie_data_list = sort_movies_by_title(movie_data_list)
+        elif sortBy in [SORT_BY_RELEASE_DATE_DESC, SORT_BY_RELEASE_DATE_ASC]:
+            order_ascending = sortBy == SORT_BY_RELEASE_DATE_ASC
+            movie_data_list = sort_movies_by_release_date(movie_data_list, ascending=order_ascending)
+        return build_movielist_response(movies=movie_data_list, limit=limit)
