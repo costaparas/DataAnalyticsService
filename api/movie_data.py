@@ -12,7 +12,12 @@ def get_this_dir():
 
 
 def get_movie_data():
-    dataset = flask.current_app.config.get(MOVIE_DATASET)
+    import flask
+    if flask.has_app_context():
+        dataset = flask.current_app.config.get(MOVIE_DATASET)
+    else:
+        dataset = "full"
+
     if dataset == "full":
         return get_movie_data_full()
     elif dataset == "small":
