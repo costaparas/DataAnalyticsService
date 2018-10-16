@@ -4,7 +4,9 @@ from resources.movie import get_movie_or_404, get_movies_info
 from resources.requires_auth import requires_auth
 
 import sys, os
-sys.path.append(os.path.join('..', 'ml'))
+from normalize_paths import append_ml_dir_to_syspath, get_this_dir
+append_ml_dir_to_syspath(__file__)
+# sys.path.append(os.path.join('..', 'ml'))
 import recommend
 
 api = Namespace("recommendations", description="Movie recommendations.")
@@ -19,6 +21,9 @@ class Recommendations(Resource):
     @requires_auth(api)
     def get(self, movie_id):
         movie = get_movie_or_404(movie_id)
+        clusters_path = os.path.abspath(os.path.join(get_this_dir(__file__), ".."))
+        cluster_numbers_path = None
+
         cluster_data = [os.path.join('..', 'ml', 'clusters.pk'), os.path.join('..', 'ml', 'cluster-numbers.pk')]
         recommendation_data = recommend.recommend(movie['Title'], cluster_data)['cluster_movies']
         recommendations = list(map(lambda x: x['id'], recommendation_data))
