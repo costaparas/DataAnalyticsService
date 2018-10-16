@@ -1,7 +1,12 @@
 @font-face {
    font-family: Adams;
-   src: url('adam-cg-pro.regular.otf');
+   src: url('assets/adam-cg-pro.regular.otf');
 }
+
+@font-face {
+    font-family: OpenSans;
+    src: url('assets/OpenSans-Light.ttf');
+  }
 
 body {
    margin: 0;
@@ -32,14 +37,19 @@ section.overhang {
    background-position: center;
    background-size: cover;
    background-color: thistle;
+   top: 0;
+   width: -webkit-fill-available;
+   position: fixed;
 }
 
-section.overhang h1 {
+section.overhang a {
    font-family: Adams;
    font-size: 2.5em;
    margin: 0;
    color: white;
    padding-top: 4.2vh;
+   display: block;
+   text-decoration: none;
 }
 
 section.overhang input {
@@ -56,8 +66,10 @@ section.overhang input {
 }
 
 section.move_row {
-   box-shadow: inset 0 0px 4em rgba(216,191,216);
-   height: 80em;
+    box-shadow: inset 0 0px 4em rgba(216,191,216);
+    height: 80vh;
+    margin-top: 20vh;
+    overflow-y: scroll;
 }
 
 .scroll_row {
@@ -76,13 +88,17 @@ section.move_row {
    max-width: 130px;
    cursor: pointer;
    border-radius: 10px;
-   transition: 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-.scroll_row_card:hover {
-   transform: scale(1.05);
-
+::placeholder { 
+    color: white;
+    opacity: 1; 
 }
+
+.scroll_row_card img:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease-in-out, transform 0.3s ease-in-out;
+ }
  
  .scroll_row_card img {
    width: 100%;
