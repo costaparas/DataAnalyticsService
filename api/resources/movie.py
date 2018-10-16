@@ -70,6 +70,7 @@ class MovieList(Resource):
             movie_data_list = sorted_movies
         elif sortBy in [SORT_BY_RELEASE_DATE_DESC,SORT_BY_RELEASE_DATE_ASC]:
             do_reversed = sortBy == SORT_BY_RELEASE_DATE_DESC
+            #TODO: sort by 'Released' if its not 'N/A'. Otherwise check 'Year'.
             sorted_movies = list(sorted(
                 movie_data_list,
                 key=lambda x:release_date_to_datetime(x["Released"]),
