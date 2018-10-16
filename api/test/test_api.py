@@ -27,6 +27,7 @@ def get_token(client):
     token = resp.json["token"]
     return token
 
+
 def test_search_movies_by_title(client):
     token = get_token(client=client)
     resp = client.get("/movies", headers={
@@ -34,13 +35,23 @@ def test_search_movies_by_title(client):
     }, data={
         # "sortBy":"newest",
         # "sortBy":"oldest",
-        "sortBy":"title",
-        "inTitle" : "day",
+        "sortBy": "title",
+        "inTitle": "day",
         "limit": 20,
     })
     assert resp.status_code == 200
     j = resp.json
     print(j)
+
+
+def test_get_genres(client):
+    token = get_token(client=client)
+    resp = client.get("/genres", headers={
+        HEADER_AUTH_TOKEN: token,
+    })
+    j = resp.json
+    assert resp.status_code == 200
+
 
 def test_get_random_movies(client):
     token = get_token(client=client)
@@ -57,10 +68,13 @@ def test_get_recommendation(client):
     token = get_token(client=client)
     resp2 = client.get("/recommendations/0098282", headers={
         HEADER_AUTH_TOKEN: token,
+    },data={
+        "limit" : 5,
     })
     j = resp2.json
     assert resp2.status_code == 200
     assert 'recommendations' in j
+    assert len(j['recommendations']) <= 5
 
 
 def test_unauthenticated_get(client):
@@ -70,7 +84,7 @@ def test_unauthenticated_get(client):
 
 def test_generate_token_failure(client):
     resp = client.post("/token/generate", data={})
-    assert resp.status_code == 401
+    assert resp.status_code == 400
 
 
 def test_generate_token_success(client):
@@ -92,6 +106,5 @@ def test_validate_token(client):
 
 
 if __name__ == '__main__':
-    pytest.main(["test_api.py", "-k", "test_search"])
-    # pytest.main(["test_api.py"])
-
+    # pytest.main(["test_api.py", "-k", "test_get_genres"])
+    pytest.main(["test_api.py"])

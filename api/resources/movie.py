@@ -1,6 +1,7 @@
 from flask_restplus import abort, Resource, Namespace, reqparse
 
 from movie_data import get_movie_data
+from resources.genres_endpoint import get_genres
 from resources.utils import release_date_and_year_strings_to_datetime
 from .requires_auth import requires_auth
 
@@ -38,18 +39,6 @@ class Movie(Resource):
         return get_movie_or_404(movie_id)
 
 
-movie_list_req_parser = reqparse.RequestParser()
-movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results.")
-movie_list_req_parser.add_argument('inTitle', type=str, help="Query movies by title.")
-
-SORT_BY_RELEASE_DATE_ASC = "oldest"
-SORT_BY_RELEASE_DATE_DESC = "newest"
-SORT_BY_TITLE = "title"
-
-movie_list_req_parser.add_argument('sortBy',
-                                   choices=(SORT_BY_RELEASE_DATE_ASC, SORT_BY_RELEASE_DATE_DESC, SORT_BY_TITLE),
-                                   help="Sort search results.",
-                                   default=SORT_BY_TITLE)
 
 
 def sort_movies_by_title(movies):
@@ -76,10 +65,23 @@ def build_movielist_response(movies, limit=None):
     }
 
 
+movie_list_req_parser = reqparse.RequestParser()
+movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results.", default=20)
+movie_list_req_parser.add_argument('inTitle', type=str, help="Query movies by title.")
+
+SORT_BY_RELEASE_DATE_ASC = "oldest"
+SORT_BY_RELEASE_DATE_DESC = "newest"
+SORT_BY_TITLE = "title"
+
+movie_list_req_parser.add_argument('sortBy',
+                                   choices=(SORT_BY_RELEASE_DATE_ASC, SORT_BY_RELEASE_DATE_DESC, SORT_BY_TITLE),
+                                   help="Sort search results.",
+                                   default=SORT_BY_TITLE)
+movie_list_req_parser.add_argument('genre',choices=(),help="Query movies of a certain genre.")
 @api.route('')
 class MovieList(Resource):
     @api.response(200, 'Success.')
-    @api.doc(description="Get a list of available movies.")
+    @api.doc(description="Search for movies.")
     @api.expect(movie_list_req_parser)
     @requires_auth(api)
     def get(self):
