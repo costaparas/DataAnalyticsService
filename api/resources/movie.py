@@ -2,7 +2,7 @@ from flask_restplus import abort, Resource, Namespace, reqparse
 
 from movie_data import get_movie_data
 from .requires_auth import requires_auth
-from resources.utils import release_date_to_datetime
+from resources.utils import release_date_and_year_strings_to_datetime
 api = Namespace("movies", description="Movie data.")
 
 
@@ -41,8 +41,8 @@ movie_list_req_parser = reqparse.RequestParser()
 movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results.")
 movie_list_req_parser.add_argument('inTitle', type=str, help="Query movies by title.")
 
-SORT_BY_RELEASE_DATE_ASC = "release-date-oldest"
-SORT_BY_RELEASE_DATE_DESC = "release-date-newest"
+SORT_BY_RELEASE_DATE_ASC = "oldest"
+SORT_BY_RELEASE_DATE_DESC = "newest"
 SORT_BY_TITLE = "title"
 
 movie_list_req_parser.add_argument('sortBy', choices=(SORT_BY_RELEASE_DATE_ASC, SORT_BY_RELEASE_DATE_DESC, SORT_BY_TITLE), help="Sort search results.",
@@ -73,7 +73,7 @@ class MovieList(Resource):
             #TODO: sort by 'Released' if its not 'N/A'. Otherwise check 'Year'.
             sorted_movies = list(sorted(
                 movie_data_list,
-                key=lambda x:release_date_to_datetime(x["Released"]),
+                key=lambda x:release_date_and_year_strings_to_datetime(x["Released"],x["Year"]),
                 reverse=do_reversed
             ))
             movie_data_list = sorted_movies

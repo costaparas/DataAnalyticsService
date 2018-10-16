@@ -32,10 +32,10 @@ def test_search_movies_by_title(client):
     resp = client.get("/movies", headers={
         HEADER_AUTH_TOKEN: token,
     }, data={
-        # "sortBy":"release-date-newest",
-        "sortBy":"release-date-oldest",
+        "sortBy":"newest",
+        # "sortBy":"oldest",
         # "inTitle" : "z",
-        "limit": 10,
+        "limit": 30,
     })
     assert resp.status_code == 200
     j = resp.json
