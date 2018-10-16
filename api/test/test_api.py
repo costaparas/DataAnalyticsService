@@ -32,7 +32,6 @@ def test_search_movies_by_title(client):
     resp = client.get("/movies", headers={
         HEADER_AUTH_TOKEN: token,
     }, data={
-        "sortBy" : "b",
         "inTitle" : "z",
         "limit": 5,
     })
