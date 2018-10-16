@@ -14,8 +14,8 @@ TEST_USERS = {
 
 api = Namespace("token", description="API authentication token.")
 credential_parser = reqparse.RequestParser()
-credential_parser.add_argument('username', type=str, required=True, location="form")
-credential_parser.add_argument('password', type=str, required=True, location="form")
+credential_parser.add_argument('username', type=str, required=True, location="form", default="user")
+credential_parser.add_argument('password', type=str, required=True, location="form", default="test1")
 
 
 @api.route('/generate')
