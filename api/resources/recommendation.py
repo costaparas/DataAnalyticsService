@@ -19,7 +19,8 @@ class Recommendations(Resource):
     @requires_auth(api)
     def get(self, movie_id):
         movie = get_movie_or_404(movie_id)
-        recommendation_data = recommend.recommend(movie['Title'])['cluster_movies']
+        cluster_data = ['../ml/clusters.pk', '../ml/cluster-numbers.pk']
+        recommendation_data = recommend.recommend(movie['Title'], cluster_data)['cluster_movies']
         recommendations = list(map(lambda x: x['id'], recommendation_data))
         recommendations.remove(movie_id)
         return {

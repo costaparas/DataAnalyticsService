@@ -44,7 +44,7 @@ def parse_cmd_line_args():
 
 
 def run_from_cmd_line(app):
-    import os
+    import sys, os
     args = parse_cmd_line_args()
     app.config[MOVIE_DATASET] = args.dataset
 
@@ -56,6 +56,9 @@ def run_from_cmd_line(app):
             f.write(os.environ['PRIVATE_KEY'])
     else:
         path_to_private_key = getattr(args, PRIVATE_KEY)
+        if not path_to_private_key:
+            print('%s: missing private key' %sys.argv[0], file=sys.stderr)
+            sys.exit(1)
 
     app.config[AUTH_FACTORY] = AuthTokenFactory.withPrivateKeyFile(
         path_to_private_key=path_to_private_key

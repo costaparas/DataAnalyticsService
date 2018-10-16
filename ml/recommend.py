@@ -14,17 +14,17 @@ def main():
 	else:
 		query = ''
 
-	print(recommend(query))
+	print(recommend(query, ['clusters.pk', 'cluster-numbers.pk']))
 	sys.exit(status)
 
-def recommend(query):
+def recommend(query, cluster_data):
 	global status
 
 	#retrieve cluster data
 	try:
-		with open('clusters.pk', 'rb') as f:
+		with open(cluster_data[0], 'rb') as f:
 			clusters = pickle.load(f)
-		with open('cluster-numbers.pk', 'rb') as f:
+		with open(cluster_data[1], 'rb') as f:
 			cluster_numbers = pickle.load(f)
 	except (PermissionError, OSError) as e:
 		print(str(e), file=sys.stderr)
