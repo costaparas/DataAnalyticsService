@@ -32,8 +32,10 @@ def test_search_movies_by_title(client):
     resp = client.get("/movies", headers={
         HEADER_AUTH_TOKEN: token,
     }, data={
-        "inTitle" : "z",
-        "limit": 5,
+        # "sortBy":"release-date-newest",
+        "sortBy":"release-date-oldest",
+        # "inTitle" : "z",
+        "limit": 10,
     })
     assert resp.status_code == 200
     j = resp.json
@@ -79,7 +81,7 @@ def test_generate_token_success(client):
 
 
 def test_validate_token(client):
-    token = get_token()
+    token = get_token(client)
     resp2 = client.post("/token/validate", data={
         "token": token
     })

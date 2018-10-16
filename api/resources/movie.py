@@ -2,7 +2,7 @@ from flask_restplus import abort, Resource, Namespace, reqparse
 
 from movie_data import get_movie_data
 from .requires_auth import requires_auth
-
+from resources.utils import release_date_to_datetime
 api = Namespace("movies", description="Movie data.")
 
 
@@ -19,6 +19,7 @@ def get_movies_info(movie_ids):
     movie_data_list = []
     for movie_id, movie_obj in movie_data_dict.items():
         if len(movie_ids) > 1 and not movie_id in movie_ids: continue
+        if movie_obj["Title"] == '#DUPE#': continue
         new_movie_obj = movie_obj.copy()
         new_movie_obj['movie_id'] = movie_id
         movie_data_list.append(new_movie_obj)
@@ -40,10 +41,11 @@ movie_list_req_parser = reqparse.RequestParser()
 movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results.")
 movie_list_req_parser.add_argument('inTitle', type=str, help="Query movies by title.")
 
-SORT_BY_RELEASE = "release-date"
+SORT_BY_RELEASE_DATE_ASC = "release-date-oldest"
+SORT_BY_RELEASE_DATE_DESC = "release-date-newest"
 SORT_BY_TITLE = "title"
 
-movie_list_req_parser.add_argument('sortBy', choices=(SORT_BY_RELEASE, SORT_BY_TITLE), help="Sort search results.",
+movie_list_req_parser.add_argument('sortBy', choices=(SORT_BY_RELEASE_DATE_ASC, SORT_BY_RELEASE_DATE_DESC, SORT_BY_TITLE), help="Sort search results.",
                                    default=SORT_BY_TITLE)
 
 
@@ -66,10 +68,14 @@ class MovieList(Resource):
         if sortBy == SORT_BY_TITLE:
             sorted_movies = list(sorted(movie_data_list, key=lambda x:x["Title"]))
             movie_data_list = sorted_movies
-        elif sortBy == SORT_BY_RELEASE:
-            sorted_movies = list(sorted(movie_data_list, key=lambda x:x["Title"]))
+        elif sortBy in [SORT_BY_RELEASE_DATE_DESC,SORT_BY_RELEASE_DATE_ASC]:
+            do_reversed = sortBy == SORT_BY_RELEASE_DATE_DESC
+            sorted_movies = list(sorted(
+                movie_data_list,
+                key=lambda x:release_date_to_datetime(x["Released"]),
+                reverse=do_reversed
+            ))
             movie_data_list = sorted_movies
-            pass
         else:
             pass
         if limit is None:
