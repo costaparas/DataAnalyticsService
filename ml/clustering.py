@@ -110,7 +110,7 @@ def main():
     if save_clusters: write_clusters(clusters, cluster_numbers)
 
     # Write out evaluation metrics
-    if write_evaluation_metrics: write_metrics(model_type.name, cluster_features, model, n_clusters)
+    if write_evaluation_metrics: write_metrics(model_type.name, cluster_features, model, linkage, n_clusters)
 
 def parse_args():
     # too hard with argparse, so old-fashioned manual parsing
@@ -200,7 +200,7 @@ def write_clusters(clusters, cluster_numbers):
         sys.exit(1)
 
 
-def write_metrics(model_name, model, labels, clusters=0, width=35):
+def write_metrics(model_name, model, labels, linkage, clusters=0, width=35):
     # Write evaluation metrics to a file, while preserving stats of other models
     # We also preserve stats of the same model if it uses a different number of clusters
     try:
@@ -225,6 +225,9 @@ def write_metrics(model_name, model, labels, clusters=0, width=35):
     # We want to maximise these without getting our clusters so high that they become too small
     silhouette_score = sklearn.metrics.silhouette_score(model, labels)
     calinski_hara_score = sklearn.metrics.calinski_harabaz_score(model, labels)
+
+    if linkage != '':
+        model_name += ' (' + linkage + ')'
 
     if line_to_write == len(data):
         data.append("{:<{width}} {:<{width}} {:<{width}} {:<{width}}\n".format(
