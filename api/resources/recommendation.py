@@ -3,8 +3,8 @@ from flask_restplus import Resource, Namespace
 from resources.movie import get_movie_or_404, get_movies_info
 from resources.requires_auth import requires_auth
 
-import sys
-sys.path.append('../ml')
+import sys, os
+sys.path.append(os.path.join('..', 'ml'))
 import recommend
 
 api = Namespace("recommendations", description="Movie recommendations.")
@@ -19,7 +19,8 @@ class Recommendations(Resource):
     @requires_auth(api)
     def get(self, movie_id):
         movie = get_movie_or_404(movie_id)
-        recommendation_data = recommend.recommend(movie['Title'])['cluster_movies']
+        cluster_data = [os.path.join('..', 'ml', 'clusters.pk'), os.path.join('..', 'ml', 'cluster-numbers.pk')]
+        recommendation_data = recommend.recommend(movie['Title'], cluster_data)['cluster_movies']
         recommendations = list(map(lambda x: x['id'], recommendation_data))
         recommendations.remove(movie_id)
         return {
