@@ -34,6 +34,8 @@ class Movie(Resource):
 
 movie_list_req_parser = reqparse.RequestParser()
 movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results.")
+movie_list_req_parser.add_argument('inTitle', type=str, help="Query movies by title.")
+movie_list_req_parser.add_argument('sortBy', choices=("release_date","title"), help="Sort search results.", default="title")
 @api.route('')
 class MovieList(Resource):
     @api.response(200, 'Success.')
@@ -43,7 +45,13 @@ class MovieList(Resource):
     def get(self):
         args = movie_list_req_parser.parse_args()
         limit = args.get('limit')
+        inTitle = args.get("inTitle")
+        if inTitle is None: inTitle = ""
+        sortBy = args.get("sortBy")
+
         movie_data_list = get_movies_info([])
+        filtered = [x for x in movie_data_list if inTitle in x["Title"].lower()]
+        movie_data_list = filtered
         if limit is None:
             limit = len(movie_data_list)
         return {
