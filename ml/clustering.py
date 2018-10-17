@@ -200,7 +200,8 @@ def write_clusters(clusters, cluster_numbers):
         sys.exit(1)
 
 
-def write_metrics(model_name, model, labels, linkage, clusters=0, width=35):
+def write_metrics(model_name, model, labels, linkage, clusters=0, width=35, cwidth=20):
+
     # Write evaluation metrics to a file, while preserving stats of other models
     # We also preserve stats of the same model if it uses a different number of clusters
     try:
@@ -208,9 +209,9 @@ def write_metrics(model_name, model, labels, linkage, clusters=0, width=35):
             data = f.readlines()
     except FileNotFoundError:
         with open('metrics.txt', 'w', encoding='utf-8') as f:
-            data = ["{:<{width}} {:<{width}} {:<{width}} {:<{width}}\n".format("Model Name", "# Clusters",
+            data = ["{:<{width}} {:<{cwidth}} {:<{width}} {:<{width}}\n".format("Model Name", "# Clusters",
                                                                              "Silhouette Score", "Calinski-Hara Score",
-                                                                             width=width)]
+                                                                             width=width, cwidth=cwidth)]
             f.write(data[0])
 
 
@@ -230,11 +231,11 @@ def write_metrics(model_name, model, labels, linkage, clusters=0, width=35):
         model_name += ' (' + linkage + ')'
 
     if line_to_write == len(data):
-        data.append("{:<{width}} {:<{width}} {:<{width}} {:<{width}}\n".format(
-                model_name, clusters, silhouette_score, calinski_hara_score, width=width))
+        data.append("{:<{width}} {:<{cwidth}} {:<{width}} {:<{width}}\n".format(
+                model_name, clusters, silhouette_score, calinski_hara_score, width=width, cwidth=cwidth))
     else:
-        data[line_to_write] = "{:<{width}} {:<{width}} {:<{width}} {:<{width}}\n".format(
-                model_name, clusters, silhouette_score, calinski_hara_score, width=width)
+        data[line_to_write] = "{:<{width}} {:<{cwidth}} {:<{width}} {:<{width}}\n".format(
+                model_name, clusters, silhouette_score, calinski_hara_score, width=width, cwidth=cwidth)
 
     with open('metrics.txt', 'w', encoding='utf-8') as f:
         f.writelines(data)
