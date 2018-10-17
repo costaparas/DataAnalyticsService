@@ -3,7 +3,7 @@
 prog='python3 clustering.py'
 rm -f metrics.txt metrics.csv
 
-for model in KMEANS MEANSHIFT BIRCH AGGLOMERATIVE AGGLOMERATIVE_EUCLID AGGLOMERATIVE_L1 AGGLOMERATIVE_L2
+for model in KMEANS MEANSHIFT BIRCH AGGLOMERATIVE AGGLOMERATIVE_EUCLID AGGLOMERATIVE_L1 AGGLOMERATIVE_L2 AGGLOMERATIVE_MAN
 do
 	printf "%s" $model
 	test $model = 'MEANSHIFT' && printf "\n" && $prog $model && continue
