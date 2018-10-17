@@ -67,6 +67,14 @@ def test_search_movies_by_title(client):
     j = resp.json
     print(j)
 
+def test_get_titles(client):
+    token = get_token(client=client)
+    resp = client.get("/movie_titles", headers={
+        HEADER_AUTH_TOKEN: token,
+    })
+    j = resp.json
+    assert resp.status_code == 200
+    assert "movies" in j
 
 def test_get_genres(client):
     token = get_token(client=client)
@@ -130,5 +138,5 @@ def test_validate_token(client):
 
 
 if __name__ == '__main__':
-    pytest.main(["test_api.py", "-k", "test_search_movies_by_title_b"])
-    # pytest.main(["test_api.py"])
+    # pytest.main(["test_api.py", "-k", "test_get_titles"])
+    pytest.main(["test_api.py"])
