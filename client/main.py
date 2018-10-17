@@ -20,14 +20,14 @@ def get_api_client():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
 	movie_name = request.form['search_term']
-	movie_list = get_api_client().get_movies(limit=10)
+	movie_list = get_api_client().get_movie_recommendations_by_title(movie_title=movie_name,limit=20)
 	return render_template('template-results.html', searched_term=movie_name, movies=movie_list)
 
 
 @app.route('/')
 def index():
 	search_form = searchForm()
-	movie_list = get_api_client().get_movies(limit=15)
+	movie_list = get_api_client().get_random_movies(limit=15)
 	return render_template('template.html', form=search_form, movies=movie_list)
 
 
