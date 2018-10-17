@@ -69,7 +69,11 @@ class ApiClient:
             })
         if resp.status_code == 200:
             j = resp.json()
-            return j
+            movies = j["movies"]
+            if len(movies) > 0:
+                return movies[0]
+            else:
+                return None
         else:
             raise RequestFailure(resp)
 
@@ -100,7 +104,7 @@ class ApiClient:
         else:
             raise RequestFailure(resp)
 
-    def get_movie_recommendations_by_id(self, movie_id, limit):
+    def get_movie_recommendations_by_id(self, movie_id, limit=10):
         resp = self.make_authenticated_request(
             GET,
             self.build_url("/recommendations/{}".format(movie_id)),
@@ -115,10 +119,13 @@ class ApiClient:
         else:
             raise RequestFailure(resp)
 
-    def get_movie_recommendation_by_title(self, movie_title,limit=10):
+    def get_movie_recommendations_by_title(self, movie_title,limit=10):
         movie = self.get_movie_by_title(movie_title=movie_title)
-        recom = self.get_movie_recommendations_by_id(movie_id=movie["movie_id"], limit=limit)
-        return recom
+        if movie is None:
+            return []
+        else:
+            recom = self.get_movie_recommendations_by_id(movie_id=movie["movie_id"], limit=limit)
+            return recom
 
     def build_url(self, api_path):
         return self.server_url + api_path
