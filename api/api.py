@@ -26,10 +26,14 @@ api.namespaces.clear()
 from resources.movie import api as movie_api
 from resources.recommendation import api as recom_api
 from resources.auth_endpoint import api as token_api
-
-api.add_namespace(movie_api)
-api.add_namespace(recom_api)
+from resources.random_endpoint import api as random_api
+from resources.genres_endpoint import api as genre_api
 api.add_namespace(token_api)
+api.add_namespace(movie_api)
+api.add_namespace(genre_api)
+api.add_namespace(random_api)
+api.add_namespace(recom_api)
+
 
 
 def parse_cmd_line_args():
@@ -44,7 +48,7 @@ def parse_cmd_line_args():
 
 
 def run_from_cmd_line(app):
-    import os
+    import sys, os
     args = parse_cmd_line_args()
     app.config[MOVIE_DATASET] = args.dataset
 
@@ -56,6 +60,9 @@ def run_from_cmd_line(app):
             f.write(os.environ['PRIVATE_KEY'])
     else:
         path_to_private_key = getattr(args, PRIVATE_KEY)
+        if not path_to_private_key:
+            print('%s: missing private key' %sys.argv[0], file=sys.stderr)
+            sys.exit(1)
 
     app.config[AUTH_FACTORY] = AuthTokenFactory.withPrivateKeyFile(
         path_to_private_key=path_to_private_key

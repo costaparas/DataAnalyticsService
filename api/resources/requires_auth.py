@@ -17,7 +17,9 @@ def requires_auth(api):
                 abort(401, 'Authentication token is missing.')
             else:
                 try:
-                    token_payload = get_auth().validate(token)
+                    auth = get_auth()
+                    if auth is not None:
+                        token_payload = get_auth().validate(token)
                     return f(*args, **kwargs)
                 except BadSignature:
                     abort(401, "Invalid token")

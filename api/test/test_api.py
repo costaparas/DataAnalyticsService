@@ -8,7 +8,7 @@ from resources.const import MOVIE_DATASET, HEADER_AUTH_TOKEN, AUTH_FACTORY
 @pytest.fixture
 def client():
     # setup db
-    app.config[MOVIE_DATASET] = "small"
+    app.config[MOVIE_DATASET] = "full"
     app.config[AUTH_FACTORY] = AuthTokenFactory(private_key="some key")
     client = app.test_client()
 
@@ -18,6 +18,66 @@ def client():
     pass
 
 
+def get_token(client):
+    resp = client.post("/token/generate", data={
+        "username": "user",
+        "password": "test1",
+    })
+    assert resp.status_code == 201
+    token = resp.json["token"]
+    return token
+
+
+def test_search_movies_by_title(client):
+    token = get_token(client=client)
+    resp = client.get("/movies", headers={
+        HEADER_AUTH_TOKEN: token,
+    }, data={
+        "sortBy":"top-rated",
+        # "sortBy":"oldest",
+        "genre" : "Drama",
+        # "sortBy": "title",
+        # "inTitle": "dog",
+        "limit": 20,
+    })
+    assert resp.status_code == 200
+    j = resp.json
+    print(j)
+
+
+def test_get_genres(client):
+    token = get_token(client=client)
+    resp = client.get("/genres", headers={
+        HEADER_AUTH_TOKEN: token,
+    })
+    j = resp.json
+    assert resp.status_code == 200
+
+
+def test_get_random_movies(client):
+    token = get_token(client=client)
+    resp = client.get("/random/movies", headers={
+        HEADER_AUTH_TOKEN: token,
+    }, data={
+        "limit": 2,
+    })
+    j = resp.json
+    assert resp.status_code == 200
+
+
+def test_get_recommendation(client):
+    token = get_token(client=client)
+    resp2 = client.get("/recommendations/0098282", headers={
+        HEADER_AUTH_TOKEN: token,
+    },data={
+        "limit" : 5,
+    })
+    j = resp2.json
+    assert resp2.status_code == 200
+    assert 'recommendations' in j
+    assert len(j['recommendations']) <= 5
+
+
 def test_unauthenticated_get(client):
     resp = client.get("/movies")
     assert resp.status_code == 401
@@ -25,17 +85,11 @@ def test_unauthenticated_get(client):
 
 def test_generate_token_failure(client):
     resp = client.post("/token/generate", data={})
-    assert resp.status_code == 401
+    assert resp.status_code == 400
 
 
 def test_generate_token_success(client):
-    resp = client.post("/token/generate", data={
-        "username": "user",
-        "password": "test1",
-    })
-    assert resp.status_code == 201
-    token = resp.json["token"]
-
+    token = get_token(client=client)
     resp2 = client.get("/movies", headers={
         HEADER_AUTH_TOKEN: token,
     })
@@ -43,13 +97,7 @@ def test_generate_token_success(client):
 
 
 def test_validate_token(client):
-    resp = client.post("/token/generate", data={
-        "username": "user",
-        "password": "test1",
-    })
-    assert resp.status_code == 201
-    token = resp.json["token"]
-
+    token = get_token(client)
     resp2 = client.post("/token/validate", data={
         "token": token
     })
@@ -59,4 +107,5 @@ def test_validate_token(client):
 
 
 if __name__ == '__main__':
-    pytest.main(["test_api.py", "-k", "test_generate_token_success"])
+    # pytest.main(["test_api.py", "-k", "test_get_genres"])
+    pytest.main(["test_api.py"])
