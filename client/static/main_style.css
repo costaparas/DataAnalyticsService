@@ -66,13 +66,14 @@ section.overhang input.search_button {
 section.move_row {
    box-shadow: inset 0 0px 4em rgba(0,0,0,0.85);
    height: 30vh;
+   max-height: 30vh;
 }
 
 .scroll_row {
    display: flex;
+   max-height: -webkit-fill-available;
    flex-direction: row;
    padding: 10px;
-   min-width: 100%;
    min-height: 15%;
    max-width: 100%;
    overflow-x: auto;
@@ -84,8 +85,8 @@ section.move_row {
 
 .scroll_row_card {
    margin: 10px;
-   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
-   min-width: 130px;
+   padding-bottom: 1%;
+   min-width: 140px;
  }
  
  .scroll_row_card img:hover {
@@ -95,5 +96,6 @@ section.move_row {
 
  .scroll_row_card img {
    width: 100%;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
    height: 100%;
  }
