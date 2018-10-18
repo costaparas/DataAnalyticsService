@@ -21,7 +21,8 @@ def get_api_client():
 def search():
 	movie_name = request.form['search_term']
 	movie_list = get_api_client().get_movie_recommendations_by_title(movie_title=movie_name,limit=20)
-	return render_template('template-results.html', searched_term=movie_name, movies=movie_list)
+	movie_name_list = get_api_client().get_movie_names()
+	return render_template('template-results.html', searched_term=movie_name, movies=movie_list, movie_names=movie_name_list)
 
 
 @app.route('/')
