@@ -1,0 +1,86 @@
+Model Name                          # Clusters           Silhouette Score                    Calinski-Hara Score                
+KMEANS                              100                  0.28470557469745195                 172.11742695748202                 
+KMEANS                              150                  0.3356672403161157                  141.44898648235042                 
+KMEANS                              200                  0.3626566710090251                  119.85011476902677                 
+KMEANS                              250                  0.3809619194544931                  104.37765383906302                 
+KMEANS                              300                  0.4015318161747745                  94.03577937267438                  
+KMEANS                              350                  0.4064220372383351                  85.19756306252107                  
+KMEANS                              400                  0.42341660883113436                 79.9426476207946                   
+MEANSHIFT                             5                  0.21037476276429748                 2.5269003841773894                 
+BIRCH                               100                  0.2559179924924564                  152.09493523039146                 
+BIRCH                               150                  0.292541819038859                   120.49797365575103                 
+BIRCH                               200                  0.3156932096211464                  101.96099435136395                 
+BIRCH                               250                  0.34238283701058325                 91.95440708397295                  
+BIRCH                               300                  0.36137558157665556                 83.53674194998305                  
+BIRCH                               350                  0.3737927874553886                  76.66680061401819                  
+BIRCH                               400                  0.3855361054063242                  71.37511632757135                  
+AGGLOMERATIVE (average)             100                  0.1184878813405969                  70.44868252055849                  
+AGGLOMERATIVE (complete)            100                  0.173758188214584                   114.5443371754382                  
+AGGLOMERATIVE (average)             150                  0.1308346768337126                  59.26656990906914                  
+AGGLOMERATIVE (complete)            150                  0.2033934298414124                  91.51458878781222                  
+AGGLOMERATIVE (average)             200                  0.18778277046635644                 60.86511551204092                  
+AGGLOMERATIVE (complete)            200                  0.2156401041435486                  74.5174880267136                   
+AGGLOMERATIVE (average)             250                  0.19154057285365547                 52.21709952829022                  
+AGGLOMERATIVE (complete)            250                  0.22910759013293913                 66.61130967563618                  
+AGGLOMERATIVE (average)             300                  0.2043828368594927                  48.59958863918686                  
+AGGLOMERATIVE (complete)            300                  0.2738833480203141                  63.94812168813941                  
+AGGLOMERATIVE (average)             350                  0.20718694571332086                 43.77250743998153                  
+AGGLOMERATIVE (complete)            350                  0.3044987638458711                  61.33603919882302                  
+AGGLOMERATIVE (average)             400                  0.2103551725846652                  40.87740013639211                  
+AGGLOMERATIVE (complete)            400                  0.3340530591953128                  60.45148404339769                  
+AGGLOMERATIVE_EUCLID (average)      100                  0.2581390369467642                  151.42079324011925                 
+AGGLOMERATIVE_EUCLID (complete)     100                  0.2581390369467642                  151.42079324011925                 
+AGGLOMERATIVE_EUCLID (average)      150                  0.308603945841527                   122.71667731973251                 
+AGGLOMERATIVE_EUCLID (complete)     150                  0.308603945841527                   122.71667731973251                 
+AGGLOMERATIVE_EUCLID (average)      200                  0.34574710342952425                 106.24233665499258                 
+AGGLOMERATIVE_EUCLID (complete)     200                  0.34574710342952425                 106.24233665499258                 
+AGGLOMERATIVE_EUCLID (average)      250                  0.371904544658079                   95.33210352298761                  
+AGGLOMERATIVE_EUCLID (complete)     250                  0.371904544658079                   95.33210352298761                  
+AGGLOMERATIVE_EUCLID (average)      300                  0.39431767371309395                 87.46558121719336                  
+AGGLOMERATIVE_EUCLID (complete)     300                  0.39431767371309395                 87.46558121719336                  
+AGGLOMERATIVE_EUCLID (average)      350                  0.41320044781567494                 81.44730714057566                  
+AGGLOMERATIVE_EUCLID (complete)     350                  0.41320044781567494                 81.44730714057566                  
+AGGLOMERATIVE_EUCLID (average)      400                  0.42933227132082596                 76.68731952333098                  
+AGGLOMERATIVE_EUCLID (complete)     400                  0.42933227132082596                 76.68731952333098                  
+AGGLOMERATIVE_L1 (average)          100                  -0.020814804081932838               4.552885456366588                  
+AGGLOMERATIVE_L1 (complete)         100                  0.12639077986578767                 90.41184093998763                  
+AGGLOMERATIVE_L1 (average)          150                  -0.06510162378072962                4.582674528980757                  
+AGGLOMERATIVE_L1 (complete)         150                  0.16790746198099232                 76.42528659616545                  
+AGGLOMERATIVE_L1 (average)          200                  -0.08584403497147423                4.880226134285069                  
+AGGLOMERATIVE_L1 (complete)         200                  0.19049020708395936                 66.75075823876017                  
+AGGLOMERATIVE_L1 (average)          250                  -0.07482008668148153                7.238134829864558                  
+AGGLOMERATIVE_L1 (complete)         250                  0.2245834995062932                  61.8235267671827                   
+AGGLOMERATIVE_L1 (average)          300                  0.016350160468419275                15.566758970719137                 
+AGGLOMERATIVE_L1 (complete)         300                  0.24379788049132414                 57.06711376506843                  
+AGGLOMERATIVE_L1 (average)          350                  0.04257773968132041                 18.147867579830855                 
+AGGLOMERATIVE_L1 (complete)         350                  0.2523508283474999                  52.705004686723                    
+AGGLOMERATIVE_L1 (average)          400                  0.03752412367990002                 16.110310997012196                 
+AGGLOMERATIVE_L1 (complete)         400                  0.27150318552129304                 50.97988414569615                  
+AGGLOMERATIVE_L2 (average)          100                  -0.02124732333910881                4.6505343176805365                 
+AGGLOMERATIVE_L2 (complete)         100                  0.12639077986578767                 90.41184093998763                  
+AGGLOMERATIVE_L2 (average)          150                  -0.06937785127968563                4.446682500816124                  
+AGGLOMERATIVE_L2 (complete)         150                  0.16790746198099232                 76.42528659616545                  
+AGGLOMERATIVE_L2 (average)          200                  -0.09795565878978534                4.080971357831472                  
+AGGLOMERATIVE_L2 (complete)         200                  0.19049020708395936                 66.75075823876017                  
+AGGLOMERATIVE_L2 (average)          250                  -0.08977584501699307                5.843939467227511                  
+AGGLOMERATIVE_L2 (complete)         250                  0.2245834995062932                  61.8235267671827                   
+AGGLOMERATIVE_L2 (average)          300                  -0.05056326467952002                9.269039595351964                  
+AGGLOMERATIVE_L2 (complete)         300                  0.24379788049132414                 57.06711376506843                  
+AGGLOMERATIVE_L2 (average)          350                  0.018014007268358313                15.536432799249843                 
+AGGLOMERATIVE_L2 (complete)         350                  0.2523508283474999                  52.705004686723                    
+AGGLOMERATIVE_L2 (average)          400                  0.01182236368878254                 13.783279431540262                 
+AGGLOMERATIVE_L2 (complete)         400                  0.27150318552129304                 50.97988414569615                  
+AGGLOMERATIVE_MAN (average)         100                  -0.020814804081932838               4.552885456366588                  
+AGGLOMERATIVE_MAN (complete)        100                  0.12639077986578767                 90.41184093998763                  
+AGGLOMERATIVE_MAN (average)         150                  -0.06510162378072962                4.582674528980757                  
+AGGLOMERATIVE_MAN (complete)        150                  0.16790746198099232                 76.42528659616545                  
+AGGLOMERATIVE_MAN (average)         200                  -0.08584403497147423                4.880226134285069                  
+AGGLOMERATIVE_MAN (complete)        200                  0.19049020708395936                 66.75075823876017                  
+AGGLOMERATIVE_MAN (average)         250                  -0.07482008668148153                7.238134829864558                  
+AGGLOMERATIVE_MAN (complete)        250                  0.2245834995062932                  61.8235267671827                   
+AGGLOMERATIVE_MAN (average)         300                  0.016350160468419275                15.566758970719137                 
+AGGLOMERATIVE_MAN (complete)        300                  0.24379788049132414                 57.06711376506843                  
+AGGLOMERATIVE_MAN (average)         350                  0.04257773968132041                 18.147867579830855                 
+AGGLOMERATIVE_MAN (complete)        350                  0.2523508283474999                  52.705004686723                    
+AGGLOMERATIVE_MAN (average)         400                  0.03752412367990002                 16.110310997012196                 
+AGGLOMERATIVE_MAN (complete)        400                  0.27150318552129304                 50.97988414569615                  
