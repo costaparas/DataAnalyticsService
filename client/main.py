@@ -28,7 +28,8 @@ def search():
 def index():
 	search_form = searchForm()
 	movie_list = get_api_client().get_random_movies(limit=15)
-	return render_template('template.html', form=search_form, movies=movie_list)
+	movie_name_list = get_api_client().get_movie_names()
+	return render_template('template.html', form=search_form, movies=movie_list, movie_names=movie_name_list)
 
 
 class searchForm(FlaskForm):

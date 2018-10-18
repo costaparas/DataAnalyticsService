@@ -104,6 +104,16 @@ class ApiClient:
         else:
             raise RequestFailure(resp)
 
+    def get_movie_names(self):
+        resp = self.make_authenticated_request(
+            GET,
+            self.build_url("/movie_titles")
+        )
+        if resp.status_code == 200:
+            return resp.json()
+        else:
+            raise RequestFailure(resp)
+
     def get_movie_recommendations_by_id(self, movie_id, limit=10):
         resp = self.make_authenticated_request(
             GET,
