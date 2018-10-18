@@ -110,7 +110,7 @@ class ApiClient:
             self.build_url("/movie_titles")
         )
         if resp.status_code == 200:
-            return resp.json()
+            return resp.json()["movies"]
         else:
             raise RequestFailure(resp)
 

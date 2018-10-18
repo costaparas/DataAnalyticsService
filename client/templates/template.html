@@ -14,13 +14,13 @@
       <h1>Movie Search</h1>
       <form method="POST" action="/search">
         {{ form.hidden_tag() }}
-        <datalist id="movies">
+        <datalist id="movie_titles">
             {% for movie_name in movie_names %}
             <option value="{{ movie_name['title'] }}"></option>
             {% endfor %}
         </datalist>
-        {{ form.search_term() }}
-        {{ form.submit_button(class="search_button") }}
+        <input list="movie_titles" id="search_term" name="search_term" required="" type="text" value="">
+        <input class="search_button" id="submit_button" name="submit_button" type="submit" value="search">
       </form>
    </section>
    <section class="move_row">

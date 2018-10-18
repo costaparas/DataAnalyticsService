@@ -33,7 +33,6 @@ def index():
 
 
 class searchForm(FlaskForm):
-	search_term =  StringField('Movie Title', validators=[DataRequired()])
 	submit_button = SubmitField('search')
 
 
