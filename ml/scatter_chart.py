@@ -9,27 +9,28 @@ import matplotlib.pyplot as plt
 def main():
 	#read csv file into pandas dataframe
 	df = pd.read_csv('metrics.csv')
+
+	#rename columns
 	df.columns = ['model', 'clusters', 'silhouette', 'callinski-hara']
-	colors = ['red', 'orange', 'yellow', 'green', 'blue',
-		'indigo', 'violet', 'pink']
-	model_names = ['KMEANS', 'MEANSHIFT', 'BIRCH']
-#TODO: negative scale
-#	model_names = ['KMEANS', 'MEANSHIFT', 'BIRCH',
-#		'AGGLOMERATIVE', 'AGGLOMERATIVE_EUCLID', 'AGGLOMERATIVE_L1',
-#		'AGGLOMERATIVE_L2', 'AGGLOMERATIVE_MAN']
+
+	#get distinct models and number of clusters
+	model_names = np.unique(list(df['model']))
+	num_clusters = np.unique(list(df['clusters']))[1:]
 
 	fig, ax = plt.subplots()
-
-	num_clusters = np.unique(list(df['clusters']))[1:]
+	colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet',
+		'pink', 'brown', 'cyan', 'lime', 'silver', 'olive', 'magenta']
 
 	#plot combined scatter plot
 	i = 1
+	chart_title = 'Silhouette Score vs Callinski-Hara Score'
 	for model_name in model_names:
 		model = df.query('model == "%s"' %model_name)
-		ax = model.plot.scatter(x='silhouette',
-			y='callinski-hara', ax=ax, c=colors[i], label=model_name, title='Silhouette Score vs Callinksi-Hara Score')
+		ax = model.plot.scatter(x='silhouette', y='callinski-hara', ax=ax,
+		c=colors[i], label=model_name, title=chart_title)
+		i += 1
 
-		#annotate with the number of clusters
+		#annotate plot with the number of clusters
 		x = list(model['silhouette'])
 		y = list(model['callinski-hara'])
 		if model_name == 'MEANSHIFT':
@@ -40,8 +41,6 @@ def main():
 		for label in n_clusters:
 			ax.annotate(label, (x[j], y[j]))
 			j += 1
-
-		i += 1
 
 	plt.show()
 
