@@ -1,9 +1,0 @@
-Model Name                     # Clusters                     Silhouette Score               Calinski-Hara Score           
-AGGLOMERATIVE                  100                            0.1683749243477319             15.304507449973986     
-AGGLOMERATIVE                  200                            0.23269510341623756            12.421888698614653                   
-AGGLOMERATIVE_L1               100                            0.16306454701535922            14.460382380735325  
-AGGLOMERATIVE_L1               200                            0.22039699426675008            12.221860822607745                      
-AGGLOMERATIVE_L2               100                            0.17481119070267642            15.476318015948136      
-AGGLOMERATIVE_L2               200                            0.2030054747082372             11.982780896099282                  
-AGGLOMERATIVE_MAN              100                            0.1662649908329191             14.559188621933124            
-AGGLOMERATIVE_MAN              200                            0.21787785151044864            12.162260808251208            
