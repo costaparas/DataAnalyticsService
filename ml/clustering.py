@@ -21,8 +21,8 @@ class Model_Types(enum.Enum):
     AGGLOMERATIVE_MAN = 8
 
 debug = False
-save_clusters = False
-write_evaluation_metrics = True
+save_clusters = True
+write_evaluation_metrics = False
 
 
 def main():
