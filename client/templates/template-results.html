@@ -14,7 +14,12 @@
     <section class="overhang">
         <a href="{{ url_for('index') }}">Movie Search</a>
         <form method="POST" action="/search">
-        if you liked <input type="text" id="search_term" name="search_term" placeholder="{{ searched_term }}"> you may also like
+        if you liked <input list="movie_titles" type="text" id="search_term" name="search_term" placeholder="{{ searched_term }}"> you may also like
+        <datalist id="movie_titles">
+            {% for movie_name in movie_names %}
+            <option value="{{ movie_name['title'] }}"></option>
+            {% endfor %}
+        </datalist>
         </form>
    </section>
    <section class="move_row">

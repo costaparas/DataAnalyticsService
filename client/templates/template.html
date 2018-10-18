@@ -10,21 +10,27 @@
 </head>
 
 <body>
-   <section class="overhang">
-      <h1>Movie Search</h1>
-      <form method="POST" action="/search">
+    <section class="overhang">
+        <h1>Movie Search</h1>
+        <form method="POST" action="/search">
         {{ form.hidden_tag() }}
-        {{ form.search_term() }}
-        {{ form.submit_button(class="search_button") }}
-      </form>
-   </section>
-   <section class="move_row">
-      <div class="scroll_row">
-        {% for movie in movies %}
-            <div class="scroll_row_card"><img src="{{ movie.Poster }}"></div>
-        {% endfor %}
-      </div>
-   </section>
+        <datalist id="movie_titles">
+            {% for movie_name in movie_names %}
+            <option value="{{ movie_name['title'] }}"></option>
+            {% endfor %}
+        </datalist>
+        <input list="movie_titles" id="search_term" name="search_term" required="" type="text" value="">
+        <input class="search_button" id="submit_button" name="submit_button" type="submit" value="search">
+        </form>
+    </section>
+    <section class="move_row">
+    {{ form.hidden_tag() }}
+        <div class="scroll_row">
+            {% for movie in movies %}
+                <div class="scroll_row_card"><form method="POST" action="/search"><input type="hidden" name="search_term" id="search_term" value="{{ movie.Title }}"><input class="imgtype" alt="Submit" type="image" src="{{ movie.Poster }}"></input></form> </div>
+            {% endfor %}
+        </div> 
+    </section>
 </body>
 
 </html>
