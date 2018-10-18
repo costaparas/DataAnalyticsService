@@ -99,3 +99,14 @@ section.move_row {
    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
    height: 100%;
  }
+
+ .scroll_row_card .imgtype:hover {
+  transform: scale(1.05);
+  transition: 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.scroll_row_card .imgtype {
+ width: 100%;
+ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+ height: 100%;
+}

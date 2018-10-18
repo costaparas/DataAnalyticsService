@@ -24,14 +24,12 @@
         </form>
     </section>
     <section class="move_row">
-    <form method="POST" action="/search">
     {{ form.hidden_tag() }}
         <div class="scroll_row">
             {% for movie in movies %}
-                <div class="scroll_row_card"><input id="search_term" value="{{ movie.Title }}"><img src="{{ movie.Poster }}"></input></div>
+                <div class="scroll_row_card"><form method="POST" action="/search"><input type="hidden" name="search_term" id="search_term" value="{{ movie.Title }}"><input class="imgtype" alt="Submit" type="image" src="{{ movie.Poster }}"></input></form> </div>
             {% endfor %}
-        </div>
-    </form>  
+        </div> 
     </section>
 </body>
 
