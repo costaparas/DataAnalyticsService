@@ -113,7 +113,7 @@ class MovieList(Resource):
         genre = args.get("genre")
 
         movie_data_list = get_movies_info([])
-        movie_data_list = [x for x in movie_data_list if inTitle in x["Title"].lower()]
+        movie_data_list = [x for x in movie_data_list if inTitle.lower() in x["Title"].lower()]
         if genre is not None:
             movie_data_list = [x for x in movie_data_list if genre.lower() in x["Genre"].lower()]
         if sortBy == SORT_BY_TITLE:
