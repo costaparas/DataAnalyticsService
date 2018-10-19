@@ -64,6 +64,7 @@ class ApiClient:
         else:
             raise RequestFailure(resp)
 
+
     def get_movies(self, limit=None, sort_by=MovieSortCriteria.TOP_RATED, **kwargs):
         params = {
             "sortBy": sort_by,

@@ -8,10 +8,10 @@ def client():
     yield ApiClient(server_url=SERVER_URL)
 
 
-SERVER_URL = "http://localhost:5001"
+# SERVER_URL = "http://localhost:5001"
 
 
-# SERVER_URL = "https://movie-recommender-api.herokuapp.com"
+SERVER_URL = "https://movie-recommender-api.herokuapp.com"
 
 
 def test_get_token():
