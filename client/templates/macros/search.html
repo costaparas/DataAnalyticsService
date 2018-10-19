@@ -4,12 +4,7 @@
 
         <form id="movie-search" method="POST" action="/search">
             {{ form.hidden_tag() }}
-            {#        <datalist id="movie_titles">#}
-            {#            {% for movie_name in movie_names %}#}
-            {#            <option value="{{ movie_name['title'] }}"></option>#}
-            {#            {% endfor %}#}
-            {#        </datalist>#}
-            <input list="movie_titles" id="search_term" name="search_term" required="" type="text" value="">
+            <input id="search_term" name="movie_id" required type="text">
             <input class="search_button" id="submit_button" name="submit_button" type="submit" value="Search">
         </form>
     </div>
@@ -21,17 +16,21 @@
         //inject movie JSON. Should be a list of movie objects.
         var movies = {{ movie_list_json|safe }};
 
+    </script>
+    <script>
         var movie_titles = [];
         movies.forEach(function (x, idx) {
-            var title = x["title"] + " (" + x["year"] + ")";
+            var title = x["Title"] + " (" + x["Year"] + ")";
             movie_titles.push({
                 "movie_id": x["movie_id"],
                 "label": title
             });
         });
         $(function () {
+            var SEARCH_INPUT = "#search_term";
+            var FORM_ID = "#movie-search";
 
-            $("#movie-search").autocomplete({
+            $(SEARCH_INPUT).autocomplete({
                 source: function (request, response) {
                     var results = $.ui.autocomplete.filter(movie_titles, request.term);
 
@@ -40,8 +39,9 @@
                     response(results.slice(0, 10));
                 },
                 select: function (event, ui) {
-                    $("#movie-search").val(ui.item.movie_id);
-                    //$("#movie-form").submit();
+                    $(SEARCH_INPUT).val(ui.item.movie_id);
+                    {#console.log($(SEARCH_INPUT).val());#}
+                    $(FORM_ID).submit();
                 }
             });
         });

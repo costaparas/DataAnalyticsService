@@ -12,6 +12,7 @@ CONFIG_API_CLIENT = "api client"
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '3c6bf310da9102a0762ea238236cba3b'
+app.config['APP_NAME'] = 'MovieTime'
 
 
 def get_api_client():
