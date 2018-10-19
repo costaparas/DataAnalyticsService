@@ -4,9 +4,14 @@
         <h1>Movie Search</h1>
     <div>
 
-        <form id="movie-search" method="POST" action="/search">
+        <form id="movie-search" method="post" action="/search">
             {{ form.hidden_tag() }}
-            <input id="search_term" name="movie_id" required type="text">
+            {{ form.in_title(
+                    id="search_term",
+                    required=True
+
+            ) }}
+{#            <input id="search_term" name="in_title" required type="text">#}
             <input class="search_button" id="submit_button" name="submit_button" type="submit" value="Search">
         </form>
     </div>
@@ -16,13 +21,14 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
-        //inject movie JSON. Should be a list of movie objects.
+
+        //inject list of movies as JSON.
         var movies = {{ movie_list_json|safe }};
 
     </script>
     <script>
         var movie_titles = [];
-        movies.forEach(function (x, idx) {
+        movies.forEach(function (x) {
             var title = x["Title"] + " (" + x["Year"] + ")";
             movie_titles.push({
                 "movie_id": x["movie_id"],

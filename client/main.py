@@ -3,15 +3,16 @@ import argparse
 import flask
 from flask import Flask, render_template
 from flask_wtf import FlaskForm
-from wtforms import SubmitField
-
+from wtforms import StringField
+from wtforms.validators import DataRequired
+import secrets
 from api_client import ApiClient, RequestFailure
 
 HEROKU_API_SERVER = "https://movie-recommender-api.herokuapp.com"
 CONFIG_API_CLIENT = "api client"
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '3c6bf310da9102a0762ea238236cba3b'
+app.config['SECRET_KEY'] = secrets.token_urlsafe()
 app.config['APP_NAME'] = 'MovieTime'
 
 
@@ -21,7 +22,17 @@ def get_api_client():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    raise NotImplementedError
+    form = SearchForm()
+    if form.validate_on_submit():
+        in_title = form.in_title.data
+        movies = get_api_client().get_movies(inTitle=in_title)
+        # return "Searched: {}".format(form.in_title.data)
+        return flask.render_template("search_results.html",
+                                     movies=movies,
+                                     query=in_title)
+    else:
+        return flask.redirect(flask.url_for('home'))
+    # raise NotImplementedError
 
 
 # movie_name = request.form['search_term']
@@ -33,11 +44,10 @@ import json
 
 @app.route('/movies/<string:movie_id>', methods=["GET"])
 def view_movie(movie_id):
-    search_form = searchForm()
+    search_form = SearchForm()
     try:
         movie = get_api_client().get_movie(movie_id)
         recom = get_api_client().get_movie_recommendations_by_id(movie_id, limit=20)
-        # return "{}".format(json.dumps(movie))
         return flask.render_template(
             "view_movie.html",
             base_movie=movie,
@@ -51,8 +61,8 @@ def view_movie(movie_id):
 
 
 @app.route('/')
-def index():
-    search_form = searchForm()
+def home():
+    search_form = SearchForm()
     random_movies = get_api_client().get_random_movies(limit=15)
     movie_name_list = get_api_client().get_movie_names()
     movie_list_json = json.dumps(movie_name_list)
@@ -63,8 +73,9 @@ def index():
                            )
 
 
-class searchForm(FlaskForm):
-    submit_button = SubmitField('search')
+class SearchForm(FlaskForm):
+    in_title = StringField('in_title', validators=[DataRequired()])
+    # submit_button = SubmitField('search')
 
 
 def parse_cmd_line_args():
