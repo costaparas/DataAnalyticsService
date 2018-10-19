@@ -38,7 +38,7 @@ def index():
     random_movies = get_api_client().get_random_movies(limit=15)
     movie_name_list = get_api_client().get_movie_names()
     movie_list_json = json.dumps(movie_name_list)
-    return render_template('template.html',
+    return render_template('home.html',
                            form=search_form,
                            movies=random_movies,
                            movie_list_json=movie_list_json
