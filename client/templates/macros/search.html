@@ -1,5 +1,7 @@
 
 {% macro search_bar(form) -%}
+    <section class="overhang">
+        <h1>Movie Search</h1>
     <div>
 
         <form id="movie-search" method="POST" action="/search">
@@ -8,6 +10,7 @@
             <input class="search_button" id="submit_button" name="submit_button" type="submit" value="Search">
         </form>
     </div>
+    </section>
 {%- endmacro %}
 {% macro search_js(movie_list_json) -%}
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -39,9 +42,11 @@
                     response(results.slice(0, 10));
                 },
                 select: function (event, ui) {
-                    $(SEARCH_INPUT).val(ui.item.movie_id);
-                    {#console.log($(SEARCH_INPUT).val());#}
-                    $(FORM_ID).submit();
+                    {#$(SEARCH_INPUT).val(ui.item.movie_id);#}
+                    var base_url = "{{ url_for('view_movie', movie_id='') }}";
+                    var url = base_url + ui.item.movie_id;
+                    window.open(url, "_self");
+                    {#$(FORM_ID).submit();#}
                 }
             });
         });

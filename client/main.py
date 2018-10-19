@@ -5,7 +5,7 @@ from flask import Flask, render_template
 from flask_wtf import FlaskForm
 from wtforms import SubmitField
 
-from api_client import ApiClient
+from api_client import ApiClient, RequestFailure
 
 HEROKU_API_SERVER = "https://movie-recommender-api.herokuapp.com"
 CONFIG_API_CLIENT = "api client"
@@ -31,6 +31,22 @@ def search():
 
 import json
 
+@app.route('/movies/<string:movie_id>', methods=["GET"])
+def view_movie(movie_id):
+    search_form = searchForm()
+    try:
+        movie = get_api_client().get_movie(movie_id)
+        # return "{}".format(json.dumps(movie))
+        return flask.render_template(
+            "view_movie.html",
+            base_movie=movie,
+            form=search_form,
+
+        )
+    except RequestFailure:
+        flask.abort(404)
+
+
 
 @app.route('/')
 def index():
@@ -40,7 +56,7 @@ def index():
     movie_list_json = json.dumps(movie_name_list)
     return render_template('home.html',
                            form=search_form,
-                           movies=random_movies,
+                           random_movies=random_movies,
                            movie_list_json=movie_list_json
                            )
 
