@@ -51,6 +51,38 @@ def test_search_movies_by_title_b(client):
     assert resp.json["movies"][0]["movie_id"] == "0057261"
 
 
+def test_get_movies_format_min(client):
+    token = get_token(client=client)
+    resp = client.get("/movies", headers={
+        HEADER_AUTH_TOKEN: token,
+    }, data={
+        "limit": 10,
+        "format" : "minimal",
+    })
+    assert resp.status_code == 200
+    j = resp.json
+    movies = j["movies"]
+    for movie in movies:
+        assert "Plot" not in movie
+        assert "movie_id" in movie
+        assert "Title" in movie
+
+def test_get_movies_format_full(client):
+    token = get_token(client=client)
+    resp = client.get("/movies", headers={
+        HEADER_AUTH_TOKEN: token,
+    }, data={
+        "limit": 10,
+        "format" : "full",
+    })
+    assert resp.status_code == 200
+    j = resp.json
+    movies = j["movies"]
+    for movie in movies:
+        assert "Plot" in movie
+        assert "movie_id" in movie
+
+
 def test_search_movies_by_title(client):
     token = get_token(client=client)
     resp = client.get("/movies", headers={
@@ -165,6 +197,6 @@ def test_duplicate_titles(client):
     print(duplicates)
 
 if __name__ == '__main__':
-    # pytest.main(["test_api.py", "-k", "test_get_titles"])
+    pytest.main(["test_api.py", "-k", "test_get_movies_format"])
     # pytest.main(["test_api.py", "-k", "test_duplicate_titles"])
-    pytest.main(["test_api.py"])
+    # pytest.main(["test_api.py"])
