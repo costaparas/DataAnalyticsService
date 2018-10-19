@@ -1,4 +1,5 @@
 import flask
+import json
 from flask import Flask, render_template, request, url_for, redirect
 
 import os,sys
@@ -13,10 +14,9 @@ def mod_syspath(file):
     path_to_append = os.path.join(path_to_append, "..")
     path_to_append = os.path.abspath(path_to_append)
     sys.path.append(path_to_append)
-    print(sys.path)
 
 mod_syspath(__file__)
-
+syspath = sys.path
 from api_client import ApiClient
 
 CONFIG_API_CLIENT = "api client"
@@ -33,9 +33,19 @@ def get_api_client():
 
 @app.route('/')
 def index():
-    return render_template('template.html')
+    # limit=100
+    limit=100000
+    movies = get_api_client().get_movies(limit=limit)
+    minimal = []
+    for movie in movies:
+        minimal.append({
+            "movie_id" : movie["movie_id"],
+            "title" : movie["Title"],
+            "year" : movie["Year"],
+        })
+    return render_template('template.html', movies_json=json.dumps(minimal))
 
 
 
 if __name__ == '__main__':
-	app.run(debug=True)
+    app.run(debug=True)

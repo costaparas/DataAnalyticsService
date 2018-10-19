@@ -1,16 +1,49 @@
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-   <title>MovieTime - Movie Recommendations</title>
-{#   <link href="../static/main_style.css" rel="stylesheet">#}
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Movies</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    {#    <link rel="stylesheet" href="/resources/demos/style.css">#}
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
-
 <body>
-hi
-</body>
 
+<form id="movie-form" method="post" action="/search">
+    <input id="movie-search" name="movie" style="width: 400px" placeholder="Search for a movie title...">
+</form>
+
+
+</body>
+<script>
+    //inject movie JSON.
+    var movies = {{ movies_json|safe }};
+
+    var movie_titles = [];
+    movies.forEach(function (x,idx) {
+        var title = x["title"] + " (" + x["year"] + ")";
+        movie_titles.push({
+            "movie_id" : x["movie_id"],
+            "label" : title
+        });
+    });
+    $(function () {
+
+        $("#movie-search").autocomplete({
+            source: function (request, response) {
+                var results = $.ui.autocomplete.filter(movie_titles, request.term);
+
+                //limit number of search results shown.
+                //The more results rendered the less responsive the UI is.
+                response(results.slice(0, 10));
+            },
+            select : function (event, ui) {
+                $("#movie-search").val(ui.item.movie_id);
+                //$("#movie-form").submit();
+            }
+        });
+    });
+</script>
 </html>
