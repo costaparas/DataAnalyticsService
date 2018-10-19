@@ -1,14 +1,15 @@
 import argparse
+import json
+import secrets
 
 import flask
 from flask import Flask, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired
-import secrets
+
 from api_client import ApiClient, RequestFailure
 
-HEROKU_API_SERVER = "https://movie-recommender-api.herokuapp.com"
 CONFIG_API_CLIENT = "api client"
 
 app = Flask(__name__)
@@ -32,15 +33,7 @@ def search():
                                      query=in_title)
     else:
         return flask.redirect(flask.url_for('home'))
-    # raise NotImplementedError
 
-
-# movie_name = request.form['search_term']
-# movie_list = get_api_client().get_movies(limit=20)
-# # movie_name_list = get_api_client().get_movie_names()
-# return render_template('template-results.html', searched_term=movie_name, movies=movie_list, movie_names=movie_name_list)
-
-import json
 
 @app.route('/movies/<string:movie_id>', methods=["GET"])
 def view_movie(movie_id):
@@ -57,7 +50,6 @@ def view_movie(movie_id):
         )
     except RequestFailure:
         flask.abort(404)
-
 
 
 @app.route('/')
@@ -79,6 +71,7 @@ class SearchForm(FlaskForm):
 
 
 def parse_cmd_line_args():
+    HEROKU_API_SERVER = "https://movie-recommender-api.herokuapp.com"
     parser = argparse.ArgumentParser(description='Run web-app UI server.')
     parser.add_argument("--port", "-p", type=int, default=5000)
     parser.add_argument("--api_url", "-u", type=str, default=HEROKU_API_SERVER)
