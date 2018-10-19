@@ -6,6 +6,8 @@
 
    <title>MovieTime - Movie Recommendations</title>
    <link href="../static/result_page.css" rel="stylesheet">
+   <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+   
 
 </head>
 
@@ -24,10 +26,25 @@
    <section class="move_row">
       <div class="scroll_row">
         {% for movie in movies %}
-            <div class="scroll_row_card"><img src="{{ movie.Poster }}"><h2>{{ movie.Title }}</h2><p>{{ movie.Year }} {{ movie.Rated }}</p></div>
+            <div id="trigger" class="scroll_row_card">
+              <!--Trigger/open modal-->
+              <img src="{{ movie.Poster }}">
+              <!--modal-->
+              <div id="modalbox" class="modal">
+                <!--modal content-->
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <p>{{ movie.Plot }}</p>
+                </div>
+              </div>
+               <h2>{{ movie.Title }}</h2>
+              <p>{{ movie.Year }} {{ movie.Rated }}</p>
+            </div>
+            
         {% endfor %}
       </div>
    </section>
+   <script type="text/javascript" src="/static/modal.js"></script>
 </body>
 
 </html>
