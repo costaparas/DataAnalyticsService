@@ -1,0 +1,16 @@
+{% from 'macros/search.html' import search_js, search_bar %}
+{% from 'macros/head.html' import head %}
+{% from 'macros/movie_row.html' import movie_row %}
+<!DOCTYPE html>
+<html>
+{{ head(title="Movie Recommendations") }}
+
+<body>
+<div class="bg-img">
+
+    {{ search_bar(form) }}
+    {{ movie_row(random_movies) }}
+</div>
+</body>
+{{ search_js(movie_list_json) }}
+</html>
