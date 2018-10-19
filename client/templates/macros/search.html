@@ -1,0 +1,49 @@
+
+{% macro search_bar(form) -%}
+    <div>
+
+        <form id="movie-search" method="POST" action="/search">
+            {{ form.hidden_tag() }}
+            {#        <datalist id="movie_titles">#}
+            {#            {% for movie_name in movie_names %}#}
+            {#            <option value="{{ movie_name['title'] }}"></option>#}
+            {#            {% endfor %}#}
+            {#        </datalist>#}
+            <input list="movie_titles" id="search_term" name="search_term" required="" type="text" value="">
+            <input class="search_button" id="submit_button" name="submit_button" type="submit" value="Search">
+        </form>
+    </div>
+{%- endmacro %}
+{% macro search_js(movie_list_json) -%}
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        //inject movie JSON. Should be a list of movie objects.
+        var movies = {{ movie_list_json|safe }};
+
+        var movie_titles = [];
+        movies.forEach(function (x, idx) {
+            var title = x["title"] + " (" + x["year"] + ")";
+            movie_titles.push({
+                "movie_id": x["movie_id"],
+                "label": title
+            });
+        });
+        $(function () {
+
+            $("#movie-search").autocomplete({
+                source: function (request, response) {
+                    var results = $.ui.autocomplete.filter(movie_titles, request.term);
+
+                    //limit number of search results shown.
+                    //The more results rendered the less responsive the UI is.
+                    response(results.slice(0, 10));
+                },
+                select: function (event, ui) {
+                    $("#movie-search").val(ui.item.movie_id);
+                    //$("#movie-form").submit();
+                }
+            });
+        });
+    </script>
+{%- endmacro %}

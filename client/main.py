@@ -28,25 +28,30 @@ def search():
 # # movie_name_list = get_api_client().get_movie_names()
 # return render_template('template-results.html', searched_term=movie_name, movies=movie_list, movie_names=movie_name_list)
 
+import json
+
 
 @app.route('/')
 def index():
     search_form = searchForm()
     random_movies = get_api_client().get_random_movies(limit=15)
     movie_name_list = get_api_client().get_movie_names()
-    return render_template('template.html', form=search_form, movies=random_movies, movie_names=movie_name_list)
+    movie_list_json = json.dumps(movie_name_list)
+    return render_template('template.html',
+                           form=search_form,
+                           movies=random_movies,
+                           movie_list_json=movie_list_json
+                           )
 
 
 class searchForm(FlaskForm):
     submit_button = SubmitField('search')
 
 
-
-
 def parse_cmd_line_args():
     parser = argparse.ArgumentParser(description='Run web-app UI server.')
     parser.add_argument("--port", "-p", type=int, default=5000)
-    parser.add_argument("--api_url","-u", type=str, default=HEROKU_API_SERVER)
+    parser.add_argument("--api_url", "-u", type=str, default=HEROKU_API_SERVER)
     args = parser.parse_args()
     return args
 
@@ -57,4 +62,4 @@ if __name__ == '__main__':
         server_url=args.api_url
     )
     print(args)
-    app.run(debug=True,port=args.port)
+    app.run(debug=True, port=args.port)
