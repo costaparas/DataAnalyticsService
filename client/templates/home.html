@@ -1,0 +1,30 @@
+{% from 'macros/search.html' import search_js, search_bar %}
+{% from 'macros/head.html' import head %}
+<!DOCTYPE html>
+<html>
+{{ head(title="Movie Recommendations") }}
+
+<body>
+<section class="overhang">
+    <h1>Movie Search</h1>
+    {{ search_bar(form) }}
+</section>
+<section class="move_row">
+    {{ form.hidden_tag() }}
+    <div class="scroll_row">
+        {% for movie in movies %}
+            <div class="scroll_row_card">
+                <form method="POST" action="/search">
+                    <input type="hidden" name="search_term" id="search_term"
+                           value="{{ movie.Title }}">
+                    <input class="imgtype"
+                           alt="Submit" type="image"
+                           src="{{ movie.Poster }}"></input>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+</body>
+{{ search_js(movie_list_json) }}
+</html>
