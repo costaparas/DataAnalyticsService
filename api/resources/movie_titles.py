@@ -11,9 +11,15 @@ def get_movie_titles():
     movies = get_movies_info(movie_ids=[])
     titles = []
     for movie in movies:
+        # Needed to return more information to distinguish
+        # duplicate title movies to user.
+        # E.g. There are 3 movies titled "Alice in Wonderland".
         titles.append({
             "movie_id" : movie["movie_id"],
             "title" : movie["Title"],
+            "year" : movie["Year"],
+            "poster" : movie["Poster"],
+            # "released" : movie["Released"],
         })
     sorted_titles = list(sorted(titles, key=lambda x:x["title"]))
     return sorted_titles

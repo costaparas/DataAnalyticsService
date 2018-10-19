@@ -75,7 +75,17 @@ def test_get_titles(client):
     j = resp.json
     assert resp.status_code == 200
     assert "movies" in j
-
+    movies = j["movies"]
+    weird_years = []
+    for movie in movies:
+        year = movie["year"]
+        if not(year.startswith("1") or year.startswith("2")):
+            print(movie)
+        try:
+            _ = int(movie["year"])
+        except ValueError:
+            weird_years.append(movie)
+    print(weird_years)
 def test_get_genres(client):
     token = get_token(client=client)
     resp = client.get("/genres", headers={
@@ -136,7 +146,25 @@ def test_validate_token(client):
     j = resp2.json
     print(j)
 
+def test_duplicate_titles(client):
+    token = get_token(client=client)
+    resp = client.get("/movie_titles", headers={
+        HEADER_AUTH_TOKEN: token,
+    })
+    assert resp.status_code == 200
+    j = resp.json
+    movies = j["movies"]
+    from collections import Counter
+    titles_dict = Counter()
+    for movie in movies:
+        key = movie["title"] + movie["year"]
+        titles_dict[key] +=1
+    duplicates = [
+        (title,count) for title,count in titles_dict.items() if count>1
+    ]
+    print(duplicates)
 
 if __name__ == '__main__':
     # pytest.main(["test_api.py", "-k", "test_get_titles"])
+    # pytest.main(["test_api.py", "-k", "test_duplicate_titles"])
     pytest.main(["test_api.py"])
