@@ -72,7 +72,7 @@ def sort_movies_by_release_date(movies, ascending=True):
 
 
 movie_list_req_parser = reqparse.RequestParser()
-movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results.", default=20)
+movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results. If no limit is given all results are returned.")
 movie_list_req_parser.add_argument('inTitle', type=str, help="Query movies by title.")
 
 SORT_BY_RELEASE_DATE_ASC = "oldest"
