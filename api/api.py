@@ -28,10 +28,8 @@ from resources.recommendation import api as recom_api
 from resources.auth_endpoint import api as token_api
 from resources.random_endpoint import api as random_api
 from resources.genres_endpoint import api as genre_api
-from resources.movie_titles import api as titles_api
 api.add_namespace(token_api)
 api.add_namespace(movie_api)
-api.add_namespace(titles_api)
 api.add_namespace(genre_api)
 api.add_namespace(random_api)
 api.add_namespace(recom_api)
