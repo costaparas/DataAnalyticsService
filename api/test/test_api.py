@@ -27,6 +27,61 @@ def get_token(client):
     token = resp.json["token"]
     return token
 
+def test_search_movies_by_title_b(client):
+    token = get_token(client=client)
+    resp = client.get("/movies", headers={
+        HEADER_AUTH_TOKEN: token,
+    }, data={
+        "inTitle": "Lord of the Flies",
+        "limit": 1,
+    })
+    assert resp.status_code == 200
+
+    assert len(resp.json["movies"]) == 1
+    assert resp.json["movies"][0]["movie_id"] == "0057261"
+
+    resp2 = client.get("/movies", headers={
+        HEADER_AUTH_TOKEN: token,
+    }, data={
+        "inTitle": "lord of the flies",
+        "limit": 1,
+    })
+    assert resp2.status_code == 200
+    assert len(resp2.json["movies"]) == 1
+    assert resp.json["movies"][0]["movie_id"] == "0057261"
+
+
+def test_get_movies_format_min(client):
+    token = get_token(client=client)
+    resp = client.get("/movies", headers={
+        HEADER_AUTH_TOKEN: token,
+    }, data={
+        "limit": 10,
+        "format" : "minimal",
+    })
+    assert resp.status_code == 200
+    j = resp.json
+    movies = j["movies"]
+    for movie in movies:
+        assert "Plot" not in movie
+        assert "movie_id" in movie
+        assert "Title" in movie
+
+def test_get_movies_format_full(client):
+    token = get_token(client=client)
+    resp = client.get("/movies", headers={
+        HEADER_AUTH_TOKEN: token,
+    }, data={
+        "limit": 10,
+        "format" : "full",
+    })
+    assert resp.status_code == 200
+    j = resp.json
+    movies = j["movies"]
+    for movie in movies:
+        assert "Plot" in movie
+        assert "movie_id" in movie
+
 
 def test_search_movies_by_title(client):
     token = get_token(client=client)
@@ -44,7 +99,25 @@ def test_search_movies_by_title(client):
     j = resp.json
     print(j)
 
-
+def test_get_titles(client):
+    token = get_token(client=client)
+    resp = client.get("/movie_titles", headers={
+        HEADER_AUTH_TOKEN: token,
+    })
+    j = resp.json
+    assert resp.status_code == 200
+    assert "movies" in j
+    movies = j["movies"]
+    weird_years = []
+    for movie in movies:
+        year = movie["year"]
+        if not(year.startswith("1") or year.startswith("2")):
+            print(movie)
+        try:
+            _ = int(movie["year"])
+        except ValueError:
+            weird_years.append(movie)
+    print(weird_years)
 def test_get_genres(client):
     token = get_token(client=client)
     resp = client.get("/genres", headers={
@@ -105,7 +178,25 @@ def test_validate_token(client):
     j = resp2.json
     print(j)
 
+def test_duplicate_titles(client):
+    token = get_token(client=client)
+    resp = client.get("/movie_titles", headers={
+        HEADER_AUTH_TOKEN: token,
+    })
+    assert resp.status_code == 200
+    j = resp.json
+    movies = j["movies"]
+    from collections import Counter
+    titles_dict = Counter()
+    for movie in movies:
+        key = movie["title"] + movie["year"]
+        titles_dict[key] +=1
+    duplicates = [
+        (title,count) for title,count in titles_dict.items() if count>1
+    ]
+    print(duplicates)
 
 if __name__ == '__main__':
-    # pytest.main(["test_api.py", "-k", "test_get_genres"])
-    pytest.main(["test_api.py"])
+    pytest.main(["test_api.py", "-k", "test_get_movies_format"])
+    # pytest.main(["test_api.py", "-k", "test_duplicate_titles"])
+    # pytest.main(["test_api.py"])

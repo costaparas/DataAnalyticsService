@@ -71,18 +71,8 @@ def sort_movies_by_release_date(movies, ascending=True):
     return sorted_movies
 
 
-def build_movielist_response(movies, limit=None):
-    if limit is None:
-        limit = len(movies)
-    ret = movies[:limit]
-    return {
-        'movies': ret,
-        'num_movies': len(ret)
-    }
-
-
 movie_list_req_parser = reqparse.RequestParser()
-movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results.", default=20)
+movie_list_req_parser.add_argument('limit', type=int, help="Limit number of results. If no limit is given all results are returned.")
 movie_list_req_parser.add_argument('inTitle', type=str, help="Query movies by title.")
 
 SORT_BY_RELEASE_DATE_ASC = "oldest"
@@ -96,6 +86,34 @@ movie_list_req_parser.add_argument('sortBy',
                                    help="Sort search results.",
                                    default=SORT_BY_TITLE)
 movie_list_req_parser.add_argument('genre', choices=get_genres(), help="Query movies of a certain genre.")
+
+FORMAT_FULL = "full"
+FORMAT_MINIMAL = "minimal"
+movie_list_req_parser.add_argument('format',
+                                   choices=(FORMAT_FULL, FORMAT_MINIMAL),
+                                   default=FORMAT_FULL,
+                                   help="Return movie objects with all information or a minimal set of fields (movie_id, Title, Year, Poster)"
+                                   )
+
+
+def build_movielist_response(movies, limit=None, format=FORMAT_FULL):
+    if limit is None:
+        limit = len(movies)
+    ret = movies[:limit]
+    if format == FORMAT_MINIMAL:
+        reformated = []
+        for movie in ret:
+            reformated.append({
+                "movie_id" : movie["movie_id"],
+                "Title" : movie["Title"],
+                "Year" : movie["Year"],
+                "Poster" : movie["Poster"],
+            })
+        ret = reformated
+    return {
+        'movies': ret,
+        'num_movies': len(ret)
+    }
 
 
 @api.route('')
@@ -111,9 +129,10 @@ class MovieList(Resource):
         if inTitle is None: inTitle = ""
         sortBy = args.get("sortBy")
         genre = args.get("genre")
+        format = args.get("format")
 
         movie_data_list = get_movies_info([])
-        movie_data_list = [x for x in movie_data_list if inTitle in x["Title"].lower()]
+        movie_data_list = [x for x in movie_data_list if inTitle.lower() in x["Title"].lower()]
         if genre is not None:
             movie_data_list = [x for x in movie_data_list if genre.lower() in x["Genre"].lower()]
         if sortBy == SORT_BY_TITLE:
@@ -123,4 +142,4 @@ class MovieList(Resource):
             movie_data_list = sort_movies_by_release_date(movie_data_list, ascending=order_ascending)
         elif sortBy == SORT_BY_RATING:
             movie_data_list = sort_movies_by_rating(movie_data_list)
-        return build_movielist_response(movies=movie_data_list, limit=limit)
+        return build_movielist_response(movies=movie_data_list, limit=limit, format=format)
