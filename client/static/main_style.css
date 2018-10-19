@@ -21,9 +21,11 @@ body {
 .bg-img {
     background-position: center center;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
     /*background-size: auto;*/
     background-image: url('/static/blurred.png');
+    width: 100vw;
+    height: 100vh;
 
 }
 

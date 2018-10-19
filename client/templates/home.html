@@ -6,9 +6,11 @@
 {{ head(title="Movie Recommendations") }}
 
 <body>
-{{ bg() }}
-{{ search_bar(form) }}
-{{ movie_row(random_movies) }}
+<div class="bg-img">
+
+    {{ search_bar(form) }}
+    {{ movie_row(random_movies) }}
+</div>
 </body>
 {{ search_js(movie_list_json) }}
 </html>

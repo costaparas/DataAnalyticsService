@@ -36,11 +36,13 @@ def view_movie(movie_id):
     search_form = searchForm()
     try:
         movie = get_api_client().get_movie(movie_id)
+        recom = get_api_client().get_movie_recommendations_by_id(movie_id, limit=20)
         # return "{}".format(json.dumps(movie))
         return flask.render_template(
             "view_movie.html",
             base_movie=movie,
             form=search_form,
+            movies=recom
 
         )
     except RequestFailure:

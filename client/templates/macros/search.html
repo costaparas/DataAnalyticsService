@@ -43,10 +43,12 @@
                 },
                 select: function (event, ui) {
                     {#$(SEARCH_INPUT).val(ui.item.movie_id);#}
+                    {#$(FORM_ID).submit();#}
+
+                    //Go straight to the movie, instead of showing search results...
                     var base_url = "{{ url_for('view_movie', movie_id='') }}";
                     var url = base_url + ui.item.movie_id;
                     window.open(url, "_self");
-                    {#$(FORM_ID).submit();#}
                 }
             });
         });
