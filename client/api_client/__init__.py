@@ -3,10 +3,12 @@ import requests
 GET = "GET"
 POST = "POST"
 
+
 class RequestFailure(Exception):
     def __init__(self, response, msg="Request failed."):
         super(RequestFailure, self).__init__("{}. Response={}".format(msg, response))
         self.response = response
+
 
 class MovieSortCriteria:
     RELEASE_OLDEST = "oldest"
@@ -14,6 +16,7 @@ class MovieSortCriteria:
     TITLE = "title"
     TOP_RATED = "top-rated"
     all_criteria = [TOP_RATED, TITLE, RELEASE_NEWEST, RELEASE_OLDEST]
+
 
 class ApiClient:
     def __init__(self, server_url, token=None):
@@ -37,6 +40,7 @@ class ApiClient:
         prepped = self.session.prepare_request(req)
 
         return self.session.send(prepped)
+
     def get_genres(self):
         resp = self.make_authenticated_request(
             GET,
@@ -47,6 +51,7 @@ class ApiClient:
             return genres
         else:
             raise RequestFailure(resp)
+
     def get_movie(self, movie_id):
         resp = self.make_authenticated_request(
             GET,
@@ -59,32 +64,19 @@ class ApiClient:
         else:
             raise RequestFailure(resp)
 
-    def get_movie_by_title(self, movie_title):
-        resp = self.make_authenticated_request(
-            GET,
-            self.build_url("/movies"),
-            data={
-                "limit": 1,
-                "inTitle": movie_title
-            })
-        if resp.status_code == 200:
-            j = resp.json()
-            movies = j["movies"]
-            if len(movies) > 0:
-                return movies[0]
-            else:
-                return None
-        else:
-            raise RequestFailure(resp)
+    def get_movies(self, limit=None, sort_by=MovieSortCriteria.TOP_RATED, **kwargs):
+        params = {
+            "sortBy": sort_by,
+        }
+        if limit is not None:
+            params["limit"] = limit
 
-    def get_movies(self, limit=10, sort_by=MovieSortCriteria.TOP_RATED):
+        params.update(**kwargs)
+
         resp = self.make_authenticated_request(
             GET,
             self.build_url("/movies"),
-            data={
-                "limit": limit,
-                "sortBy" : sort_by,
-            })
+            data=params)
         if resp.status_code == 200:
             movie_list = resp.json()["movies"]
             return movie_list
@@ -105,12 +97,17 @@ class ApiClient:
             raise RequestFailure(resp)
 
     def get_movie_names(self):
+        params = {
+            "sortBy": MovieSortCriteria.TITLE,
+            "format" : "minimal"
+        }
         resp = self.make_authenticated_request(
             GET,
-            self.build_url("/movie_titles")
-        )
+            self.build_url("/movies"),
+            data=params)
         if resp.status_code == 200:
-            return resp.json()["movies"]
+            movie_list = resp.json()["movies"]
+            return movie_list
         else:
             raise RequestFailure(resp)
 
@@ -120,7 +117,6 @@ class ApiClient:
             self.build_url("/recommendations/{}".format(movie_id)),
             data={
                 "limit": limit,
-                "movie_id": movie_id
             })
         if resp.status_code == 200:
             j = resp.json()
@@ -128,14 +124,6 @@ class ApiClient:
             return recom
         else:
             raise RequestFailure(resp)
-
-    def get_movie_recommendations_by_title(self, movie_title,limit=10):
-        movie = self.get_movie_by_title(movie_title=movie_title)
-        if movie is None:
-            return []
-        else:
-            recom = self.get_movie_recommendations_by_id(movie_id=movie["movie_id"], limit=limit)
-            return recom
 
     def build_url(self, api_path):
         return self.server_url + api_path
@@ -167,4 +155,3 @@ class ApiClient:
             return j["token_status"] == "valid"
         else:
             raise RequestFailure(resp, msg="Could not validate token.")
-
