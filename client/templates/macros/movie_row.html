@@ -1,0 +1,17 @@
+{% macro movie_row(movies) -%}
+    <section class="move_row">
+        <div class="scroll_row">
+            {% for movie in movies %}
+                <a href="{{ url_for('view_movie', movie_id=movie['movie_id']) }}">
+
+                <div class="scroll_row_card">
+                    <img alt="{{ movie.Title }}"
+                         type="image"
+                         src="{{ movie.Poster }}">
+{#                    <span>{{ movie.Title }} ({{ movie.Year }})</span>#}
+                </div>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+{%- endmacro %}

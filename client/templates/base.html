@@ -1,0 +1,40 @@
+{% from 'macros/title.html' import title %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+  <title>
+    {% block title %}
+    {% endblock %}
+  </title>
+
+  <link href="/static/reset.css" rel="stylesheet">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link href="/static/main_style.css" rel="stylesheet">
+  <link href="/static/search-box.css" rel="stylesheet">
+  <link href="/static/grid.css" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="/static/assets/materialize/css/materialize.min.css" media="screen,projection">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/assets/materialize/js/materialize.min.js"></script>
+</head>
+
+<style>
+body {
+  background-image: url('/static/blurred.png');
+  background-repeat: no-repeat;
+  background-size: 100% 135%;
+}
+</style>
+
+<body>
+  <div class="container">
+    {% block body %}
+    {% endblock %}
+  </div>
+</body>
+</html>

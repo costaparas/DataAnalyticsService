@@ -1,0 +1,64 @@
+
+{% macro search_bar(form) -%}
+    <section class="overhang">
+        <h1>Movie Search</h1>
+    <div>
+
+
+
+        <form id="movie-search" method="post" action="/search">
+            {{ form.hidden_tag() }}
+            {{ form.in_title(
+                    id="search_term",
+                    required=True
+
+            ) }}
+{#            <input id="search_term" name="in_title" required type="text">#}
+            <input class="search_button" id="submit_button" name="submit_button" type="submit" value="Search">
+        </form>
+    </div>
+    </section>
+{%- endmacro %}
+{% macro search_js(movie_list_json) -%}
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+
+        //inject list of movies as JSON.
+        var movies = {{ movie_list_json|safe }};
+
+    </script>
+    <script>
+        var movie_titles = [];
+        movies.forEach(function (x) {
+            var title = x["Title"] + " (" + x["Year"] + ")";
+            movie_titles.push({
+                "movie_id": x["movie_id"],
+                "label": title
+            });
+        });
+        $(function () {
+            var SEARCH_INPUT = "#search_term";
+            var FORM_ID = "#movie-search";
+
+            $(SEARCH_INPUT).autocomplete({
+                source: function (request, response) {
+                    var results = $.ui.autocomplete.filter(movie_titles, request.term);
+
+                    //limit number of search results shown.
+                    //The more results rendered the less responsive the UI is.
+                    response(results.slice(0, 10));
+                },
+                select: function (event, ui) {
+                    {#$(SEARCH_INPUT).val(ui.item.movie_id);#}
+                    {#$(FORM_ID).submit();#}
+
+                    //Go straight to the movie, instead of showing search results...
+                    var base_url = "{{ url_for('view_movie', movie_id='') }}";
+                    var url = base_url + ui.item.movie_id;
+                    window.open(url, "_self");
+                }
+            });
+        });
+    </script>
+{%- endmacro %}
