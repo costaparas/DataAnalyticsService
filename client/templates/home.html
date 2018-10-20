@@ -1,4 +1,5 @@
 {% from 'macros/movie_row.html' import movie_row %}
+{% from 'macros/search.html' import search_bar, search_js %}
 
 {% extends "base.html" %}
 
@@ -67,45 +68,10 @@
   <div class="col s12 l1"></div>
 </div>
 
-<div class="row">
-  <div class="col s12 l1"></div>
-  <div class="col s12 l10">
-    <div class="input-field">
-      <form id="movie-search">
-        <label for="autocomplete-input">Get recommendations for...</label>
-        <input type="text" id="auto" class="autocomplete">
-      </form>
-    </div>
-  </div>
-  <div class="col s12 l1"></div>
-</div>
+{{ search_bar() }}
+
+{{ search_js(autocomplete) }}
 
 {{ movie_row(posters) }}
-
-<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript">
-  var movies = {{ autocomplete|safe }}
-  var movie_titles = []
-
-  movies.forEach(function(x) {
-    var title = x["Title"] + " (" + x["Year"] + ")"
-    movie_titles.push({
-      "movie_id": x["movie_id"],
-      "label": title
-    })
-  })
-
-  $("#auto").autocomplete({
-    source: function(request, response) {
-      var results = $.ui.autocomplete.filter(movie_titles, request.term)
-      response(results.slice(0, 10))
-    },
-    select: function (event, ui) {
-      var base_url = "{{ url_for('view_movie', movie_id='') }}"
-      var url = base_url + ui.item.movie_id
-      window.open(url, "_self")
-    }
-  })
-</script>
 
 {% endblock %}
