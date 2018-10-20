@@ -1,17 +1,27 @@
-{% macro movie_row(movies) -%}
-    <section class="move_row">
-        <div class="scroll_row">
-            {% for movie in movies %}
-                <a href="{{ url_for('view_movie', movie_id=movie['movie_id']) }}">
+{% macro movie_row(posters) %}
+<div class="row">
+  <div class="col s12 l12">
+    <div class="carousel">
+      {% for i in range(0, posters|length) %}
+        <a class="carousel-item" href="{{ url_for('view_movie', movie_id=posters[i][1]) }}">
+          <img src="{{ posters[i][0] }}">
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 
-                <div class="scroll_row_card">
-                    <img alt="{{ movie.Title }}"
-                         type="image"
-                         src="{{ movie.Poster }}">
-{#                    <span>{{ movie.Title }} ({{ movie.Year }})</span>#}
-                </div>
-                </a>
-            {% endfor %}
-        </div>
-    </section>
+<script type="text/javascript">
+$(function() {
+  $(document).ready(function() {
+    $('.carousel').carousel({
+      numVisible: 20,
+      padding: 10,
+      duration: 25,
+      shift: 5,
+      dist: -40
+    })
+  })
+})
+</script>
 {%- endmacro %}
