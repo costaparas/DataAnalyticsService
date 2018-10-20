@@ -32,7 +32,8 @@
       var results = $.ui.autocomplete.filter(movie_titles, request.term)
       response(results.slice(0, 10))
     },
-    select: function (event, ui) {
+    select: function(event, ui) {
+      document.getElementById('auto').value = ''
       var base_url = "{{ url_for('view_movie', movie_id='') }}"
       var url = base_url + ui.item.movie_id
       window.open(url, "_self")

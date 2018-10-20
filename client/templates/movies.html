@@ -1,4 +1,4 @@
-{% from 'macros/modal.html' import popup_modal %}
+{% from 'macros/modal.html' import popup_modal, style %}
 
 {% extends "base.html" %}
 
@@ -29,12 +29,14 @@
   <div class="col s12 l1">
     <div class="zoom">
       <a href="#modal0" class="modal-trigger">
-        <img style="height:200px" src="{{ base_movie['Poster'] }}">
+        <img style="height:250px" src="{{ base_movie['Poster'] }}">
       </a>
     </div>
   </div>
   <div class="col s12 l11"></div>
 </div>
+
+{{ style() }}
 
 {{ popup_modal(base_movie, 0) }}
 

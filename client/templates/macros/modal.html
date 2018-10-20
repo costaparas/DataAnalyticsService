@@ -1,24 +1,93 @@
+{% macro style() %}
+<style>
+.tags .tag {
+  display: inline-block;
+  font-size: 8pt;
+  color: #F0F0F0;
+  background: #404040;
+  height: 25px;
+  line-height: 20px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.24), 0 1.5px 6px rgba(0, 0, 0, 0.12);
+}
+
+.title-size {
+  font-size: 3em;
+}
+.year-size {
+  font-size: 1em;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+{% endmacro %}
+
 {% macro popup_modal(movie, i) %}
 <div id="modal{{ i }}" class="modal">
   <div class="modal-content">
     <div class="row">
-      <div class="col s12 l12"><h4>{{ movie.Title }} ({{ movie.Year }})</h4></div>
+      <div class="col s12 l12">
+        <span class="title-size">
+          {{ movie.Title }}
+        </span>
+        <span class="year-size">
+          ({{ movie.Year }})
+        </span>
+      </div>
     </div>
     <div class="row">
       <div class="col s12 l3">
         <img src="{{ movie.Poster }}" alt="{{ movie.Title }}" style="height:300px">
       </div>
       <div class="col s12 l9">
-        <p><b>Genres:</b> {{ movie.Genre }}</p>
-        <p><b>Rated:</b> {{ movie.Rated }}</p>
-        <p><b>Runtime:</b> {{ movie.Runtime }}</p>
-        <p><b>Released:</b> {{ movie.Released }}</p>
-        <p><b>Rating:</b> {{ movie.imdbRating }}</p>
-        <p><b>Number of Votes:</b> {{ movie.imdbVotes }}</p>
-        <p><b>Plot:</b> {{ movie.Plot }}</p>
-        <p><b>Actors:</b> {{ movie.Actors }}</p>
-        <p><b>Director:</b> {{ movie.Director }}</p>
-        <p><b>Writer:</b> {{ movie.Writer }}</p>
+        </p>
+          <i class="fa fa-chain tiny"></i><a href="https://www.imdb.com/title/tt{{ movie.movie_id }}/">IMDb</a> |
+          <i class="fa fa-star tiny"></i>{{ movie.imdbRating }} |
+          <i class="fa fa-clock-o tiny"></i>{{ movie.Runtime }} |
+          <i class="fa fa-comment-o tiny"></i>{{ movie.Rated }}
+        <p>
+        <br>
+        <p>{{ movie.Plot }}</p>
+        <br>
+        <p>
+          {% set genres = movie.Genre.split(',') %}
+          <b>Genres:</b>
+          <ul class="tags">
+            {% for genre in genres %}
+              <li class="tag">{{ genre }}</li>
+            {% endfor %}
+          </ul>
+        </p>
+        <br>
+        <p>
+          {% set actors = movie.Actors.split(',') %}
+          <b>Actors:</b>
+          <ul class="tags">
+            {% for actor in actors %}
+              <li class="tag">{{ actor }}</li>
+            {% endfor %}
+          </ul>
+        </p>
+        <br>
+        <p>
+          {% set directors = movie.Director.split(',') %}
+          <b>Directors:</b>
+          <ul class="tags">
+            {% for director in directors %}
+              <li class="tag">{{ director}}</li>
+            {% endfor %}
+          </ul>
+        </p>
+        <br>
+        <p>
+          {% set writers = movie.Writer.split(',') %}
+          <b>Writers:</b>
+          <ul class="tags">
+            {% for writer in writers %}
+              <li class="tag">{{ writer }}</li>
+            {% endfor %}
+          </ul>
+        </p>
       </div>
     </div>
   </div>
