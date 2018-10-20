@@ -4,12 +4,10 @@
 <!DOCTYPE html>
 <html>
 {{ head(title="Movie Recommendations") }}
-
 <body>
 <div class="bg-img">
-
-    {{ search_bar(form) }}
-    {{ movie_row(random_movies) }}
+  {{ search_bar(form) }}
+  {{ movie_row(random_movies) }}
 </div>
 </body>
 {{ search_js(movie_list_json) }}

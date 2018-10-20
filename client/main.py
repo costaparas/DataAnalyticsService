@@ -34,7 +34,6 @@ def search():
     else:
         return flask.redirect(flask.url_for('home'))
 
-
 @app.route('/movies/<string:movie_id>', methods=["GET"])
 def view_movie(movie_id):
     search_form = SearchForm()
