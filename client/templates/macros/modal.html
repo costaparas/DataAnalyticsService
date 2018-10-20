@@ -37,14 +37,19 @@
     </div>
     <div class="row">
       <div class="col s12 l3">
-        <img src="{{ movie.Poster }}" alt="{{ movie.Title }}" style="height:300px">
+        <img id="poster{{ i }}" src="{{ movie.Poster }}" alt="{{ movie.Title }}" style="height:300px">
       </div>
       <div class="col s12 l9">
         </p>
-          <i class="fa fa-chain tiny"></i><a href="https://www.imdb.com/title/tt{{ movie.movie_id }}/">IMDb</a> |
+          <i class="fa fa-chain tiny"></i><a href="https://www.imdb.com/title/{{ movie.imdbID }}/">IMDb</a> |
           <i class="fa fa-star tiny"></i>{{ movie.imdbRating }} |
           <i class="fa fa-clock-o tiny"></i>{{ movie.Runtime }} |
           <i class="fa fa-comment-o tiny"></i>{{ movie.Rated }}
+          {% if 'BoxOffice' in movie and movie.BoxOffice != 'N/A' %}
+            | <i class="fa fa-money tiny"></i>{{ movie.BoxOffice }}
+          {% elif 'Language' in movie and movie.Language != 'N/A' %}
+            | <i class="fa fa-file-sound-o tiny"></i>{{ movie.Language }}
+          {% endif %}
         <p>
         <br>
         <p>{{ movie.Plot }}</p>
@@ -92,4 +97,7 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+  $('#poster{{ i }}').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
+</script>
 {% endmacro %}

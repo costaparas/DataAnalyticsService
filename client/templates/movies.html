@@ -29,12 +29,15 @@
   <div class="col s12 l1">
     <div class="zoom">
       <a href="#modal0" class="modal-trigger">
-        <img style="height:250px" src="{{ base_movie['Poster'] }}">
+        <img id="poster0" style="height:250px" src="{{ base_movie['Poster'] }}">
       </a>
     </div>
   </div>
   <div class="col s12 l11"></div>
 </div>
+<script type="text/javascript">
+  $('#poster0').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
+</script>
 
 {{ style() }}
 
@@ -50,11 +53,14 @@
       <div class="col s1">
         <div class="zoom">
           <a href="#modal{{ i + 1 }}" class="modal-trigger">
-            <img src="{{ movies[i].Poster }}" alt="{{ movies[i].Title }}" style="height:150px">
+            <img id="poster{{ i + 1 }}" src="{{ movies[i].Poster }}" alt="{{ movies[i].Title }}" style="height:150px">
           </a>
         </div>
       </div>
       {{ popup_modal(movies[i], i + 1) }}
+      <script type="text/javascript">
+        $('#poster{{ i }}').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
+      </script>
     {% endfor %}
   </div>
   <div class="col s12 m4 l2"></div>

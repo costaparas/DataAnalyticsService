@@ -4,8 +4,11 @@
     <div class="carousel">
       {% for i in range(0, posters|length) %}
         <a class="carousel-item" href="{{ url_for('view_movie', movie_id=posters[i][1]) }}">
-          <img src="{{ posters[i][0] }}">
+          <img id="poster{{ i }}" src="{{ posters[i][0] }}">
         </a>
+        <script type="text/javascript">
+          $('#poster{{ i }}').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
+        </script>
       {% endfor %}
     </div>
   </div>
