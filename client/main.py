@@ -25,7 +25,7 @@ def view_movie(movie_id):
         movie = get_api_client().get_movie(movie_id)
         recom = get_api_client().get_movie_recommendations_by_id(movie_id, limit=20)
         return flask.render_template(
-            "view_movie.html",
+            "movies.html",
             base_movie=movie,
             movies=recom
 
