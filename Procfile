@@ -1,2 +1,2 @@
-web: sh run-api.sh
-release: sh run-client.sh
+api: sh run-api.sh
+web: sh run-client.sh
