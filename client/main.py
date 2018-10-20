@@ -23,26 +23,26 @@ def get_api_client():
 def view_movie(movie_id):
     try:
         movie = get_api_client().get_movie(movie_id)
-        recom = get_api_client().get_movie_recommendations_by_id(movie_id, limit=20)
+        recom = get_api_client().get_movie_recommendations_by_id(movie_id, limit=24)
         return flask.render_template(
             "movies.html",
             base_movie=movie,
             movies=recom
-
         )
     except RequestFailure:
         flask.abort(404)
 
 @app.route('/')
 def home():
-    random_movies = get_api_client().get_random_movies(limit=15)
+    random_movies = get_api_client().get_random_movies(limit=20)
     movie_name_list = get_api_client().get_movie_names()
     movie_list_json = json.dumps(movie_name_list)
     posters = list(map(lambda x: (x['Poster'], x['movie_id']), random_movies))
-    return render_template('home.html',
-                           posters=posters,
-                           autocomplete=movie_list_json
-                           )
+    return render_template(
+        'home.html',
+        posters=posters,
+        autocomplete=movie_list_json
+    )
 
 def parse_cmd_line_args():
     HEROKU_API_SERVER = "https://movie-recommender-api.herokuapp.com"
