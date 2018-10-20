@@ -16,23 +16,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_urlsafe()
 app.config['APP_NAME'] = 'MovieTime'
 
-
 def get_api_client():
     return flask.current_app.config[CONFIG_API_CLIENT]
-
-
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-    form = SearchForm()
-    if form.validate_on_submit():
-        in_title = form.in_title.data
-        movies = get_api_client().get_movies(inTitle=in_title)
-        # return "Searched: {}".format(form.in_title.data)
-        return flask.render_template("search_results.html",
-                                     movies=movies,
-                                     query=in_title)
-    else:
-        return flask.redirect(flask.url_for('home'))
 
 @app.route('/movies/<string:movie_id>', methods=["GET"])
 def view_movie(movie_id):
@@ -47,7 +32,6 @@ def view_movie(movie_id):
         )
     except RequestFailure:
         flask.abort(404)
-
 
 @app.route('/')
 def home():
