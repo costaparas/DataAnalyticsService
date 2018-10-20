@@ -36,14 +36,12 @@ def search():
 
 @app.route('/movies/<string:movie_id>', methods=["GET"])
 def view_movie(movie_id):
-    search_form = SearchForm()
     try:
         movie = get_api_client().get_movie(movie_id)
         recom = get_api_client().get_movie_recommendations_by_id(movie_id, limit=20)
         return flask.render_template(
             "view_movie.html",
             base_movie=movie,
-            form=search_form,
             movies=recom
 
         )
@@ -53,21 +51,14 @@ def view_movie(movie_id):
 
 @app.route('/')
 def home():
-    search_form = SearchForm()
     random_movies = get_api_client().get_random_movies(limit=15)
     movie_name_list = get_api_client().get_movie_names()
     movie_list_json = json.dumps(movie_name_list)
+    posters = list(map(lambda x: (x['Poster'], x['movie_id']), random_movies))
     return render_template('home.html',
-                           form=search_form,
-                           random_movies=random_movies,
-                           movie_list_json=movie_list_json
+                           posters=posters,
+                           autocomplete=movie_list_json
                            )
-
-
-class SearchForm(FlaskForm):
-    in_title = StringField('in_title', validators=[DataRequired()])
-    # submit_button = SubmitField('search')
-
 
 def parse_cmd_line_args():
     HEROKU_API_SERVER = "https://movie-recommender-api.herokuapp.com"
@@ -76,7 +67,6 @@ def parse_cmd_line_args():
     parser.add_argument("--api_url", "-u", type=str, default=HEROKU_API_SERVER)
     args = parser.parse_args()
     return args
-
 
 if __name__ == '__main__':
     args = parse_cmd_line_args()
