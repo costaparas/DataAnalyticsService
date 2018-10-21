@@ -47,7 +47,7 @@
           <i class="fa fa-comment-o tiny"></i>{{ movie.Rated }}
           {% if 'BoxOffice' in movie and movie.BoxOffice != 'N/A' %}
             | <i class="fa fa-money tiny"></i>{{ movie.BoxOffice }}
-          {% elif 'Language' in movie and movie.Language != 'N/A' %}
+          {% elif 'Language' in movie and movie.Language != 'N/A' and movie.Language != 'None' %}
             | <i class="fa fa-file-sound-o tiny"></i>{{ movie.Language }}
           {% endif %}
         <p>
