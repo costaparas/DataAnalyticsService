@@ -65,4 +65,4 @@ if __name__ == '__main__':
     if 'PORT' in os.environ:
         port = os.environ['PORT']
 
-    app.run(debug=True, port=args.port)
+    app.run(debug=True, port=args.port, host='0.0.0.0')
