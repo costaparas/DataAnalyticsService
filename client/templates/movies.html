@@ -57,7 +57,7 @@
     <div class="input-field">
       <select id="from-yr">
         {% for i in range(1950, max_year + 1) %}
-          <option value="{{ i }}">{{ i }}</option>
+          <option id="from{{ i }}" value="{{ i }}">{{ i }}</option>
         {% endfor %}
       </select>
       <label style="color: black;">From year:</label>
@@ -66,9 +66,10 @@
 
     <div class="input-field">
       <select id="to-yr">
-        {% for i in range(1950, max_year + 1) %}
-          <option value="{{ i }}">{{ i }}</option>
+        {% for i in range(1950, max_year) %}
+          <option id="to{{ i }}" value="{{ i }}">{{ i }}</option>
         {% endfor %}
+        <option value="{{ max_year }}" selected="selected">{{ max_year }}</option>
       </select>
       <label style="color: black;">To year:</label>
     </div>
@@ -83,16 +84,31 @@
 
   $(document).ready(function(){
     $('select').formSelect()
-    $('#to-yr').val('{{ max_year + 1 }}')
   })
 
   $("#rating").on('change', function(e) {
     refilter(e)
   })
   $("#from-yr").on('change', function(e) {
+    for (var y = 1950; y < {{ max_year }}; ++y) {
+      if (y < e.target.value) {
+        $(`#to${y}`).prop('disabled', true)
+      } else {
+        $(`#to${y}`).prop('disabled', false)
+      }
+    }
+    $('select').formSelect()
     refilter(e)
   })
   $("#to-yr").on('change', function(e) {
+    for (var y = 1950; y <= {{ max_year }}; ++y) {
+      if (y < e.target.value) {
+        $(`#from${y}`).prop('disabled', false)
+      } else {
+        $(`#from${y}`).prop('disabled', true)
+      }
+    }
+    $('select').formSelect()
     refilter(e)
   })
 
