@@ -36,12 +36,12 @@ def view_movie(movie_id):
 def home():
     random_movies = get_api_client().get_random_movies(limit=20)
     movie_name_list = get_api_client().get_movie_names()
-#    movie_list_json = json.dumps(movie_name_list)
+    movie_list_json = json.dumps(movie_name_list)
     posters = list(map(lambda x: (x['Poster'], x['movie_id']), random_movies))
     return render_template(
         'home.html',
-        posters=posters#,
-#        autocomplete=movie_list_json
+        posters=posters,
+        autocomplete=movie_list_json
     )
 
 def parse_cmd_line_args():
@@ -65,4 +65,4 @@ if __name__ == '__main__':
     if 'PORT' in os.environ:
         port = os.environ['PORT']
 
-    app.run(debug=True, port=args.port)
+    app.run(debug=True, port=args.port, host='0.0.0.0')
