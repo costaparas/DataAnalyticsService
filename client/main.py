@@ -58,4 +58,11 @@ if __name__ == '__main__':
         server_url=args.api_url
     )
     print(args)
+
+    # override port number with environment variable
+    # this approach is used in the deployed api
+    import os
+    if 'PORT' in os.environ:
+        port = os.environ['PORT']
+
     app.run(debug=True, port=args.port)
