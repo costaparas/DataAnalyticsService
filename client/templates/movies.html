@@ -25,9 +25,12 @@
   </div>
 </div>
 
+<br>
+<div class="row">
+</div>
+
 <div class="row">
   <div class="col s12 l3">
-    <br><br>
     <div class="zoom">
       <a href="#modal0" class="modal-trigger">
         <img id="poster0" style="height:300px" src="{{ base_movie['Poster'] }}">
@@ -38,13 +41,8 @@
     $('#poster0').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
   </script>
 
-  <div class="col s12 l7">
-    <div class="input-field">
-    </div>
-    <br><br><br>
-    <div class="input-field">
-    </div>
-
+  <div class="col s12 l7" style="background-color: #ffb3b3; border-radius: 8px;">
+    <br>
     <div class="input-field">
       <select id="rating">
         {% for i in range(0, 10) %}
@@ -52,9 +50,8 @@
         {% endfor %}
         <option value="10">10 stars</option>
       </select>
-      <label>Minimum rating</label>
+      <label style="color: black;">Minimum rating:</label>
     </div>
-
     <br>
 
     <div class="input-field">
@@ -63,9 +60,8 @@
           <option value="{{ i }}">{{ i }}</option>
         {% endfor %}
       </select>
-      <label>From year</label>
+      <label style="color: black;">From year:</label>
     </div>
-
     <br>
 
     <div class="input-field">
@@ -74,8 +70,9 @@
           <option value="{{ i }}">{{ i }}</option>
         {% endfor %}
       </select>
-      <label>To year</label>
+      <label style="color: black;">To year:</label>
     </div>
+    <br>
   </div>
 
   <div class="col s12 l2"></div>
