@@ -21,36 +21,134 @@
 
 <div class="row">
   <div class="col s12 l12">
-    <h4 style="color:white;">Movies like {{ base_movie["Title"] }} ({{ base_movie["Year"] }})...</h4>
+    <h3 style="color:white;">Movies like {{ base_movie["Title"] }} ({{ base_movie["Year"] }})...</h3>
   </div>
 </div>
 
 <div class="row">
-  <div class="col s12 l1">
+  <div class="col s12 l3">
+    <br><br>
     <div class="zoom">
       <a href="#modal0" class="modal-trigger">
-        <img id="poster0" style="height:250px" src="{{ base_movie['Poster'] }}">
+        <img id="poster0" style="height:300px" src="{{ base_movie['Poster'] }}">
       </a>
     </div>
   </div>
-  <div class="col s12 l11"></div>
+  <script type="text/javascript">
+    $('#poster0').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
+  </script>
+
+  <div class="col s12 l7">
+    <div class="input-field">
+    </div>
+    <br><br><br>
+    <div class="input-field">
+    </div>
+
+    <div class="input-field">
+      <select id="rating">
+        {% for i in range(0, 10) %}
+          <option value="{{ i }}">{{ i }}+ stars</option>
+        {% endfor %}
+        <option value="10">10 stars</option>
+      </select>
+      <label>Minimum rating</label>
+    </div>
+
+    <br>
+
+    <div class="input-field">
+      <select id="from-yr">
+        {% for i in range(1950, max_year + 1) %}
+          <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+      </select>
+      <label>From year</label>
+    </div>
+
+    <br>
+
+    <div class="input-field">
+      <select id="to-yr">
+        {% for i in range(1950, max_year + 1) %}
+          <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+      </select>
+      <label>To year</label>
+    </div>
+  </div>
+
+  <div class="col s12 l2"></div>
 </div>
+
 <script type="text/javascript">
-  $('#poster0').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
+  var all_movies = {{ movies|safe }}
+
+  $(document).ready(function(){
+    $('select').formSelect()
+    $('#to-yr').val('{{ max_year + 1 }}')
+  })
+
+  $("#rating").on('change', function(e) {
+    refilter(e)
+  })
+  $("#from-yr").on('change', function(e) {
+    refilter(e)
+  })
+  $("#to-yr").on('change', function(e) {
+    refilter(e)
+  })
+
+  function refilter(e) {
+    var threshold = $('#rating option:selected').text().replace(/\+? stars/, '')
+    var minYr = parseInt($('#from-yr option:selected').text())
+    var maxYr = parseInt($('#to-yr option:selected').text())
+    var filtered = []
+    var posters = []
+    for (const mov of all_movies) {
+      if (parseInt(mov.imdbRating) >= threshold &&
+      parseInt(mov.Year) >= minYr && parseInt(mov.Year) <= maxYr) {
+        filtered.push(mov)
+        posters.push(mov['Poster'])
+      }
+    }
+    var i = 1
+    var showOrder = []
+    var movieHTML = document.getElementById(`movie${i}`)
+    while (typeof(movieHTML) !== 'undefined' && movieHTML !== null) {
+      const poster = movieHTML.getElementsByTagName('img')[0]
+      if (posters.indexOf(poster.src) !== -1) {
+        showOrder.push(movieHTML.innerHTML)
+      } else {
+        showOrder.unshift(movieHTML.innerHTML)
+      }
+      i++
+      movieHTML = document.getElementById(`movie${i}`)
+    }
+    i = 1
+    while (showOrder.length > 0) {
+      const next = document.getElementById(`movie${i}`)
+      next.style.display = 'block'
+      const item = showOrder.pop()
+      if (i > posters.length) next.style.display = 'none'
+      next.innerHTML = item
+      i++
+    }
+  }
 </script>
 
 {{ style() }}
 
 {{ popup_modal(base_movie, 0) }}
 
-<div class="row">
+<div class="row" id="all-movies">
   <div class="col s12 m4 l2"></div>
     {% for i in range(0, movies|length) %}
       {% if i % 12 == 0 %}
         </div>
         <div class="row">
       {% endif %}
-      <div class="col s1">
+      <div class="col s1" id="movie{{ i + 1 }}">
         <div class="zoom">
           <a href="#modal{{ i + 1 }}" class="modal-trigger">
             <img id="poster{{ i + 1 }}" src="{{ movies[i].Poster }}" alt="{{ movies[i].Title }}" style="height:150px">
@@ -59,7 +157,7 @@
       </div>
       {{ popup_modal(movies[i], i + 1) }}
       <script type="text/javascript">
-        $('#poster{{ i }}').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
+        $('#poster{{ i + 1 }}').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
       </script>
     {% endfor %}
   </div>

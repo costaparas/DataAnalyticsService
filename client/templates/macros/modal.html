@@ -40,7 +40,7 @@
         <img id="poster{{ i }}" src="{{ movie.Poster }}" alt="{{ movie.Title }}" style="height:300px">
       </div>
       <div class="col s12 l9">
-        </p>
+        <p>
           <i class="fa fa-chain tiny"></i><a href="https://www.imdb.com/title/{{ movie.imdbID }}/">IMDb</a> |
           <i class="fa fa-star tiny"></i>{{ movie.imdbRating }} |
           <i class="fa fa-clock-o tiny"></i>{{ movie.Runtime }} |
@@ -50,7 +50,7 @@
           {% elif 'Language' in movie and movie.Language != 'N/A' and movie.Language != 'None' %}
             | <i class="fa fa-file-sound-o tiny"></i>{{ movie.Language }}
           {% endif %}
-        <p>
+        </p>
         <br>
         <p>{{ movie.Plot }}</p>
         <br>

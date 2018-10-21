@@ -1,7 +1,7 @@
 import argparse
 import json
 import secrets
-
+import datetime
 import flask
 from flask import Flask, render_template
 from flask_wtf import FlaskForm
@@ -23,11 +23,12 @@ def get_api_client():
 def view_movie(movie_id):
     try:
         movie = get_api_client().get_movie(movie_id)
-        recom = get_api_client().get_movie_recommendations_by_id(movie_id, limit=24)
+        recom = get_api_client().get_movie_recommendations_by_id(movie_id, limit=96)
         return flask.render_template(
             "movies.html",
             base_movie=movie,
-            movies=recom
+            movies=recom,
+            max_year=datetime.datetime.now().year
         )
     except RequestFailure:
         flask.abort(404)
