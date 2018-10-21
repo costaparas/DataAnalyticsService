@@ -43,7 +43,7 @@ heroku config:set DEPLOY=api --remote heroku-api
 heroku config:set DEPLOY=app --remote heroku-app
 ```
 
-### Deploy API
+### Deploy API/Client
 ```sh
 # Set environment variable to be the API Heroku remote
 export REMOTE=heroku-api
