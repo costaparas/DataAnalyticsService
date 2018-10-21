@@ -27,3 +27,11 @@ python3 main.py --api_url "$URL"
 # Run client with specifed port number $PORT and custom API $URL
 python3 main.py --port $PORT --api_url "$URL"
 ```
+
+COPYRIGHT INFORMATION
+=====================
+
+* Some images used in this site are borrowed from online sources.
+* It is not our intention to commit copyright infringement.
+* We also acknowledge the use of Materialize CSS, for more information see
+<https://github.com/costaparas/DataAnalyticsService/blob/master/client/static/assets/materialize/README.md>
