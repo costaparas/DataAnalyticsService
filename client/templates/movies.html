@@ -33,8 +33,9 @@
   <div class="col s12 l3">
     <div class="zoom">
       <a href="#modal0" class="modal-trigger">
-        <img id="poster0" style="height:300px" src="{{ base_movie['Poster'] }}">
+        <img id="poster0" style="height:275px" src="{{ base_movie['Poster'] }}">
       </a>
+      <p style="color: white;">{{ base_movie.Title }} ({{ base_movie.Year }})</p>
     </div>
   </div>
   <script type="text/javascript">
@@ -157,15 +158,16 @@
 <div class="row" id="all-movies">
   <div class="col s12 m4 l2"></div>
     {% for i in range(0, movies|length) %}
-      {% if i % 12 == 0 %}
+      {% if i % 6 == 0 %}
         </div>
         <div class="row">
       {% endif %}
-      <div class="col s1" id="movie{{ i + 1 }}">
+      <div class="col s2" id="movie{{ i + 1 }}">
         <div class="zoom">
           <a href="#modal{{ i + 1 }}" class="modal-trigger">
-            <img id="poster{{ i + 1 }}" src="{{ movies[i].Poster }}" alt="{{ movies[i].Title }}" style="height:150px">
+            <img id="poster{{ i + 1 }}" src="{{ movies[i].Poster }}" alt="{{ movies[i].Title }}" style="height:250px">
           </a>
+          <p style="color: white;">{{ movies[i].Title }} ({{ movies[i].Year }})</p>
         </div>
       </div>
       {{ popup_modal(movies[i], i + 1) }}
