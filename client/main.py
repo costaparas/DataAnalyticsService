@@ -1,7 +1,7 @@
 import argparse
 import json
 import secrets
-
+import datetime
 import flask
 from flask import Flask, render_template
 from flask_wtf import FlaskForm
@@ -16,59 +16,34 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_urlsafe()
 app.config['APP_NAME'] = 'MovieTime'
 
-
 def get_api_client():
     return flask.current_app.config[CONFIG_API_CLIENT]
 
-
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-    form = SearchForm()
-    if form.validate_on_submit():
-        in_title = form.in_title.data
-        movies = get_api_client().get_movies(inTitle=in_title)
-        # return "Searched: {}".format(form.in_title.data)
-        return flask.render_template("search_results.html",
-                                     movies=movies,
-                                     query=in_title)
-    else:
-        return flask.redirect(flask.url_for('home'))
-
-
 @app.route('/movies/<string:movie_id>', methods=["GET"])
 def view_movie(movie_id):
-    search_form = SearchForm()
     try:
         movie = get_api_client().get_movie(movie_id)
-        recom = get_api_client().get_movie_recommendations_by_id(movie_id, limit=20)
+        recom = get_api_client().get_movie_recommendations_by_id(movie_id, limit=96)
         return flask.render_template(
-            "view_movie.html",
+            "movies.html",
             base_movie=movie,
-            form=search_form,
-            movies=recom
-
+            movies=recom,
+            max_year=datetime.datetime.now().year
         )
     except RequestFailure:
         flask.abort(404)
 
-
 @app.route('/')
 def home():
-    search_form = SearchForm()
-    random_movies = get_api_client().get_random_movies(limit=15)
+    random_movies = get_api_client().get_random_movies(limit=20)
     movie_name_list = get_api_client().get_movie_names()
     movie_list_json = json.dumps(movie_name_list)
-    return render_template('home.html',
-                           form=search_form,
-                           random_movies=random_movies,
-                           movie_list_json=movie_list_json
-                           )
-
-
-class SearchForm(FlaskForm):
-    in_title = StringField('in_title', validators=[DataRequired()])
-    # submit_button = SubmitField('search')
-
+    posters = list(map(lambda x: (x['Poster'], x['movie_id']), random_movies))
+    return render_template(
+        'home.html',
+        posters=posters,
+        autocomplete=movie_list_json
+    )
 
 def parse_cmd_line_args():
     HEROKU_API_SERVER = "https://movie-recommender-api.herokuapp.com"
@@ -78,11 +53,19 @@ def parse_cmd_line_args():
     args = parser.parse_args()
     return args
 
-
 if __name__ == '__main__':
     args = parse_cmd_line_args()
     app.config[CONFIG_API_CLIENT] = ApiClient(
         server_url=args.api_url
     )
     print(args)
-    app.run(debug=True, port=args.port)
+
+    port = args.port
+
+    # override port number with environment variable
+    # this approach is used in the deployed api
+    import os
+    if 'PORT' in os.environ:
+        port = os.environ['PORT']
+
+    app.run(debug=True, port=port, host='0.0.0.0')

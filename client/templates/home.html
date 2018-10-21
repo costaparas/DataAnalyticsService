@@ -1,16 +1,77 @@
-{% from 'macros/search.html' import search_js, search_bar %}
-{% from 'macros/head.html' import head %}
 {% from 'macros/movie_row.html' import movie_row %}
-<!DOCTYPE html>
-<html>
-{{ head(title="Movie Recommendations") }}
+{% from 'macros/search.html' import search_bar, search_js %}
 
-<body>
-<div class="bg-img">
+{% extends "base.html" %}
 
-    {{ search_bar(form) }}
-    {{ movie_row(random_movies) }}
+{% block title %}
+{{ title('Home') }}
+{% endblock %}
+
+{% block body %}
+
+<style>
+  input {
+    color: #C0C0C0;
+  }
+</style>
+
+<div class="row">
+  <div class="col s12 l1"></div>
+  <div class="col s12 l10">
+    <p style="color: #C0C0C0;">
+    </p>
+  </div>
+  <div class="col s12 l1"></div>
 </div>
-</body>
-{{ search_js(movie_list_json) }}
-</html>
+
+<div class="row">
+  <div class="col s12 l1"></div>
+  <div class="col s12 l10">
+    <p style="color: #C0C0C0;">
+    </p>
+  </div>
+  <div class="col s12 l1"></div>
+</div>
+
+<div class="row">
+  <div class="col s12 l1"></div>
+  <div class="col s12 l10">
+    <p style="color: #C0C0C0;">
+    </p>
+  </div>
+  <div class="col s12 l1"></div>
+</div>
+
+<div class="row">
+  <div class="col s12 l1"></div>
+  <div class="col s12 l10">
+    <p style="color: #C0C0C0;">
+    </p>
+  </div>
+  <div class="col s12 l1"></div>
+</div>
+
+<div class="row">
+  <div class="col s12 l2"></div>
+  <div class="col s12 l8">
+    <img src="/static/movie-time-showtime-logo.png" alt="movie time logo" height="135px">
+  </div>
+  <div class="col s12 l2"></div>
+</div>
+
+<div class="row">
+  <div class="col s12 l1"></div>
+  <div class="col s12 l10">
+    <p style="color: #C0C0C0;">
+    </p>
+  </div>
+  <div class="col s12 l1"></div>
+</div>
+
+{{ search_bar() }}
+
+{{ search_js(autocomplete) }}
+
+{{ movie_row(posters) }}
+
+{% endblock %}

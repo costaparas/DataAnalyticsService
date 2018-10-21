@@ -1,1 +1,1 @@
-web: sh run-api.sh
+web: sh run-deploys.sh

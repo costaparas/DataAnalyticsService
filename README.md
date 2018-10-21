@@ -20,6 +20,7 @@ Refer to README.md files in the individual project directories for details
 ## Deployment
 The API and client application are deployed in separate instances on the Heroku cloud platform as a service:
 * API is hosted at: <https://movie-recommender-api.herokuapp.com/>
+* Client is hosted at: <https://movie-recommender-app.herokuapp.com/>
 
 ### Heroku Configuration
 ```sh
@@ -28,27 +29,45 @@ heroku login
 
 # Ensure you are listed as a collaborator:
 # https://dashboard.heroku.com/apps/movie-recommender-api/access
+# https://dashboard.heroku.com/apps/movie-recommender-app/access
 
-# Add the heroku remote
-heroku git:remote -a movie-recommender-api
+# Add the Heroku remotes
+git remote add heroku-api https://git.heroku.com/movie-recommender-api.git
+git remote add heroku-app https://git.heroku.com/movie-recommender-app.git
 
 # Set the private key for use by the API
-heroku config:set PRIVATE_KEY=`python3 api/generate_private_key.py /tmp/.private_key`
+heroku config:set PRIVATE_KEY=`python3 api/generate_private_key.py /tmp/.private_key` --remote heroku-api
+
+# Set environment variables for the type of deploy
+heroku config:set DEPLOY=api --remote heroku-api
+heroku config:set DEPLOY=app --remote heroku-app
 ```
 
 ### Deploy API
 ```sh
+# Set environment variable to be the API Heroku remote
+export REMOTE=heroku-api
+
+# Set environment variable to be the client Heroku remote
+export REMOTE=heroku-app
+
 # Deploy from master branch
-git push heroku master
+git push $REMOTE master
 
 # Deploy from branch 'foo'
-git push heroku foo:master
+git push $REMOTE foo:master
+
+# Scale the deploy to use one dyno
+heroku ps:scale web=1 --remote $REMOTE
 
 # Restart the server if needed
-heroku restart
+heroku restart --remote $REMOTE
 
 # View the server logs
-heroku logs --tail
+heroku logs --tail --remote $REMOTE
+
+# View the server environment variables
+heroku config --remote $REMOTE
 ```
 
 ## Project Structure

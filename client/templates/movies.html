@@ -1,0 +1,186 @@
+{% from 'macros/modal.html' import popup_modal, style %}
+
+{% extends "base.html" %}
+
+{% block title %}
+{{ title(base_movie["Title"] + " (" + base_movie["Year"] + ") - Recommendations") }}
+{% endblock %}
+
+{% block body %}
+<style>
+.zoom {
+  padding: 0px;
+  transition: transform .2s;
+  margin: 0 auto;
+}
+
+.zoom:hover {
+  transform: scale(1.5);
+}
+</style>
+
+<div class="row">
+  <div class="col s12 l12">
+    <h3 style="color:white;">Movies like {{ base_movie["Title"] }} ({{ base_movie["Year"] }})...</h3>
+  </div>
+</div>
+
+<br>
+<div class="row">
+</div>
+
+<div class="row">
+  <div class="col s12 l3">
+    <div class="zoom">
+      <a href="#modal0" class="modal-trigger">
+        <img id="poster0" style="height:300px" src="{{ base_movie['Poster'] }}">
+      </a>
+    </div>
+  </div>
+  <script type="text/javascript">
+    $('#poster0').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
+  </script>
+
+  <div class="col s12 l7" style="background-color: #ffb3b3; border-radius: 8px;">
+    <br>
+    <div class="input-field">
+      <select id="rating">
+        {% for i in range(0, 10) %}
+          <option value="{{ i }}">{{ i }}+ stars</option>
+        {% endfor %}
+        <option value="10">10 stars</option>
+      </select>
+      <label style="color: black;">Minimum rating:</label>
+    </div>
+    <br>
+
+    <div class="input-field">
+      <select id="from-yr">
+        {% for i in range(1950, max_year + 1) %}
+          <option id="from{{ i }}" value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+      </select>
+      <label style="color: black;">From year:</label>
+    </div>
+    <br>
+
+    <div class="input-field">
+      <select id="to-yr">
+        {% for i in range(1950, max_year) %}
+          <option id="to{{ i }}" value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+        <option value="{{ max_year }}" selected="selected">{{ max_year }}</option>
+      </select>
+      <label style="color: black;">To year:</label>
+    </div>
+    <br>
+  </div>
+
+  <div class="col s12 l2"></div>
+</div>
+
+<script type="text/javascript">
+  var all_movies = {{ movies|safe }}
+
+  $(document).ready(function(){
+    $('select').formSelect()
+  })
+
+  $("#rating").on('change', function(e) {
+    refilter(e)
+  })
+  $("#from-yr").on('change', function(e) {
+    for (var y = 1950; y < {{ max_year }}; ++y) {
+      if (y < e.target.value) {
+        $(`#to${y}`).prop('disabled', true)
+      } else {
+        $(`#to${y}`).prop('disabled', false)
+      }
+    }
+    $('select').formSelect()
+    refilter(e)
+  })
+  $("#to-yr").on('change', function(e) {
+    for (var y = 1950; y <= {{ max_year }}; ++y) {
+      if (y < e.target.value) {
+        $(`#from${y}`).prop('disabled', false)
+      } else {
+        $(`#from${y}`).prop('disabled', true)
+      }
+    }
+    $('select').formSelect()
+    refilter(e)
+  })
+
+  function refilter(e) {
+    var threshold = $('#rating option:selected').text().replace(/\+? stars/, '')
+    var minYr = parseInt($('#from-yr option:selected').text())
+    var maxYr = parseInt($('#to-yr option:selected').text())
+    var filtered = []
+    var posters = []
+    for (const mov of all_movies) {
+      if (parseInt(mov.imdbRating) >= threshold &&
+      parseInt(mov.Year) >= minYr && parseInt(mov.Year) <= maxYr) {
+        filtered.push(mov)
+        posters.push(mov['Poster'])
+      }
+    }
+    var i = 1
+    var showOrder = []
+    var movieHTML = document.getElementById(`movie${i}`)
+    while (typeof(movieHTML) !== 'undefined' && movieHTML !== null) {
+      const poster = movieHTML.getElementsByTagName('img')[0]
+      if (posters.indexOf(poster.src) !== -1) {
+        showOrder.push(movieHTML.innerHTML)
+      } else {
+        showOrder.unshift(movieHTML.innerHTML)
+      }
+      i++
+      movieHTML = document.getElementById(`movie${i}`)
+    }
+    i = 1
+    while (showOrder.length > 0) {
+      const next = document.getElementById(`movie${i}`)
+      next.style.display = 'block'
+      const item = showOrder.pop()
+      if (i > posters.length) next.style.display = 'none'
+      next.innerHTML = item
+      i++
+    }
+  }
+</script>
+
+{{ style() }}
+
+{{ popup_modal(base_movie, 0) }}
+
+<div class="row" id="all-movies">
+  <div class="col s12 m4 l2"></div>
+    {% for i in range(0, movies|length) %}
+      {% if i % 12 == 0 %}
+        </div>
+        <div class="row">
+      {% endif %}
+      <div class="col s1" id="movie{{ i + 1 }}">
+        <div class="zoom">
+          <a href="#modal{{ i + 1 }}" class="modal-trigger">
+            <img id="poster{{ i + 1 }}" src="{{ movies[i].Poster }}" alt="{{ movies[i].Title }}" style="height:150px">
+          </a>
+        </div>
+      </div>
+      {{ popup_modal(movies[i], i + 1) }}
+      <script type="text/javascript">
+        $('#poster{{ i + 1 }}').attr('onerror', "this.onerror=null; this.src='/static/default_poster.jpg'")
+      </script>
+    {% endfor %}
+  </div>
+  <div class="col s12 m4 l2"></div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.modal').modal()
+  })
+</script>
+
+{% endblock %}
