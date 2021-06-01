@@ -15,6 +15,6 @@ numpy==1.15.2
 pytz==2018.5
 requests==2.20.0
 six==1.11.0
-urllib3==1.24
+urllib3==1.26.5
 Werkzeug==0.14.1
 WTForms==2.2.1
